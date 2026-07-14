@@ -1,0 +1,23 @@
+---
+description: Minimize deps — core is stdlib-only; extras are optional and pinned
+alwaysApply: true
+---
+
+# Dependency Rules
+
+## Policy
+
+- Prefer the Python standard library.
+- `adaptron/core/` has **zero** required third-party dependencies. This is a product requirement (`PRD.md` §7), not a preference.
+- Introduce a new dependency only when it provides clear, significant value that stdlib cannot reasonably provide.
+- If proposing a new required (non-extra) dependency, **explain why** in the PR/change summary and prefer making it an optional extra when possible.
+
+## Optional extras
+
+- LangChain / CrewAI (and similar) belong only under `adaptron/bridges/` and `project.optional-dependencies` in `pyproject.toml`.
+- Pin major/minor ranges tightly for bridges; revisit deliberately when bumping (`PLAN.md` §6).
+- Dev tooling (`pytest`, `ruff`, `mypy`) is for development/CI only — never a runtime core dependency.
+
+## Verification mindset
+
+Assume CI will install the bare package and assert that `langchain`/`crewai` are absent. Do not write code that would fail that check.

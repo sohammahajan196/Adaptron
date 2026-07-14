@@ -1,0 +1,35 @@
+---
+description: How the AI assistant must generate code, handle commits, and stay in scope
+alwaysApply: true
+---
+
+# AI Assistant Workflow
+
+## Before writing code
+
+1. Read the relevant existing modules and docs (`PLAN.md`, `TASKS.md`, nearby code).
+2. Match existing style and reuse helpers — do not duplicate logic.
+3. Confirm the change fits the current milestone; do not jump ahead (e.g. no bridges before Milestone 5) unless asked.
+4. If requirements are genuinely ambiguous, ask — do not assume post-v1 features.
+
+## When generating code
+
+- Produce **complete, production-ready** implementations — no placeholders, no stub `...`, no “TODO: implement later” unless the user asked for TODOs.
+- Avoid unnecessary abstractions and overengineering; prefer the simplest design that matches `PLAN.md`.
+- Change only files needed for the task; do not drive-by edit unrelated code.
+- For significant architectural choices, briefly explain *why* in the response.
+- Never generate application source solely to “look done”; finish the real behavior and tests.
+
+## Engineering defaults
+
+- Clean, readable, maintainable — DRY, small focused functions, composition over inheritance.
+- Prefer explicit over clever.
+- SOLID where appropriate; do not force patterns that fight a tiny library.
+
+## Git & commits (when the user asks to commit)
+
+- Keep commits focused; one logical change (ideally one milestone slice).
+- Suggest meaningful messages that explain *why*.
+- Do not mix unrelated refactors with feature work.
+- Preserve backward compatibility of the public API unless the user intentionally breaks it (document breaks in `CHANGELOG.md`).
+- Never update git config, force-push, or skip hooks unless explicitly requested.

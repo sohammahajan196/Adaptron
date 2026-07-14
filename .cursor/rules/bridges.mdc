@@ -1,0 +1,24 @@
+---
+description: Optional framework bridges — lazy imports, can_wrap/adapt contract
+globs: adaptron/bridges/**/*.py
+alwaysApply: false
+---
+
+# Framework Bridges
+
+Each bridge module supports exactly one framework and exports:
+
+- `can_wrap(obj) -> bool` — duck-type check (methods/attributes), not isinstance against framework classes when avoidable
+- `adapt(obj) -> Agent` — return a normal `Agent` whose `__call__` delegates to the framework invoke API
+
+## Hard rules
+
+1. **Lazy imports** — import LangChain/CrewAI only inside functions that need them (`try`/`ImportError`). Module import of the bridge file must not require the extra to be installed if feasible; fail loudly in `adapt`/`can_wrap` when the package is required but missing.
+2. **Never import bridges from `adaptron/core/`** — `wrap()` in the package root (or a thin dispatcher) may lazy-import bridges; core stays clean.
+3. **Pin-aware failures** — if the framework API looks wrong/unsupported, raise `WrapError` with a clear message. Do not wrap incorrectly.
+4. **Defaults** — bridged types may default to `str -> str` unless overridden; document overrides in the bridge docstring.
+5. **Single I/O value** — multi-key framework payloads are one `dict` value, not multiple ports.
+
+## Detection order reminder
+
+`wrap()` must try bridges **before** the plain-Python callable check so framework objects are not swallowed by the catch-all.

@@ -20,7 +20,16 @@ adaptron/
 │       └── ci.yml
 ├── .cursor/
 │   └── rules/
-│       └── adaptron.mdc
+│       ├── core.mdc
+│       ├── architecture.mdc
+│       ├── dependencies.mdc
+│       ├── ai-workflow.mdc
+│       ├── python-standards.mdc
+│       ├── error-handling.mdc
+│       ├── performance.mdc
+│       ├── bridges.mdc
+│       ├── testing.mdc
+│       └── documentation.mdc
 ├── adaptron/
 │   ├── __init__.py
 │   ├── core/
@@ -71,9 +80,20 @@ adaptron/
 
 ## `.cursor/rules/`
 
-Persistent AI-agent guidance so implementation stays consistent with the architecture without re-explaining it every session. This file does not exist yet — it should be authored as part of Milestone 0 scaffolding (`TASKS.md`), not assumed to already be present.
+Persistent AI-agent guidance so implementation stays consistent with the architecture without re-explaining it every session. Rules are split by concern (always-apply vs. path-scoped globs) rather than one giant file:
 
-- **`adaptron.mdc`** — always-applied non-negotiables: zero-dependency core, duck-typed bridges probed before the plain-Python fallback, construction-time type checking, explicit adapter registration, actionable errors, and the v1 out-of-scope list (no branching pipelines, no distributed execution, no async).
+| File | Scope | Purpose |
+|---|---|---|
+| `core.mdc` | always | Product identity, v1 non-negotiables, out-of-scope list |
+| `architecture.mdc` | `adaptron/**/*.py` | Module boundaries, wrap order, adapter/pipeline rules |
+| `dependencies.mdc` | always | Stdlib-only core; optional extras policy |
+| `ai-workflow.mdc` | always | Code generation, scope discipline, git/commit habits |
+| `python-standards.mdc` | `**/*.py` | Typing, docstrings, style, clarity |
+| `error-handling.mdc` | `adaptron/**/*.py` | `AdaptronError` hierarchy and message requirements |
+| `performance.mdc` | `adaptron/core/**/*.py` | Negligible overhead vs LLM calls |
+| `bridges.mdc` | `adaptron/bridges/**/*.py` | Lazy imports, `can_wrap`/`adapt` contract |
+| `testing.mdc` | `tests/**/*.py` | pytest layout, core vs bridge gating |
+| `documentation.mdc` | `**/*.md` | Keep README/TASKS/PLAN synchronized with behavior |
 
 ## `adaptron/` — the core package
 

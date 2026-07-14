@@ -1,0 +1,35 @@
+---
+description: Adaptron non-negotiables — product identity, v1 scope, dependency isolation
+alwaysApply: true
+---
+
+# Adaptron Core Non-Negotiables
+
+Adaptron is an **interoperability layer**, not an agent-building framework. It wraps existing agents and resolves type mismatches via registered adapters. It does not create agents, call LLMs, or replace LangChain/CrewAI/etc.
+
+## Highest-priority constraints
+
+1. **Zero third-party deps in `adaptron/core/`** — stdlib only. Never import `langchain`, `crewai`, or any optional package, even behind `try/except`. Framework code lives only in `adaptron/bridges/`.
+2. **Public API is small** — export only `wrap`, `register_adapter`, `Pipeline`, `Agent` from `adaptron/__init__.py` unless the PRD/PLAN explicitly expands it.
+3. **Type checks at construction**, not at `run()` — mismatch → insert adapter or raise `NoAdapterError`. Never defer or silently coerce.
+4. **Adapters are explicit** — no LLM-inferred transforms, no MRO/subclass matching in v1. Exact `(source_type, target_type)` pairs only.
+5. **Actionable errors** — every exception names the stage/types involved and tells the user how to fix it (e.g. the exact `register_adapter(...)` call).
+
+## Explicitly out of scope for v1
+
+Do not implement unless the user explicitly overrides scope:
+
+- Branching/parallel pipelines (linear `>>` only)
+- Distributed / multi-host orchestration
+- Native async (`arun`) — sync `run()` only
+- Multi-input / multi-output ports (one value in, one value out)
+- Building or configuring agents / LLM providers
+
+## Source of truth
+
+- What/why: `PRD.md`
+- How: `PLAN.md`
+- Layout: `STRUCTURE.md`
+- Checklist: `TASKS.md`
+
+When docs and instinct conflict, follow the docs. If genuinely ambiguous, ask — do not invent post-v1 features.

@@ -1,0 +1,35 @@
+---
+description: Keep README, TASKS, and API docs synchronized with behavior
+globs: "**/*.md"
+alwaysApply: false
+---
+
+# Documentation Rules
+
+Docs are the source of truth for implementation. When behavior changes, update docs in the same change.
+
+## What to update when
+
+| Change | Update |
+|---|---|
+| Public API / UX | `README.md` quickstart + examples; Google docstrings |
+| Architecture / milestones | `PLAN.md` (keep stable unless design changes) |
+| Checklist progress | `TASKS.md` checkboxes |
+| User-facing release notes | `CHANGELOG.md` |
+| Repo layout | `STRUCTURE.md` |
+
+## Rules
+
+- Keep docstrings synchronized with signatures and behavior.
+- Explain non-obvious algorithms (adapter resolution, wrap detection order, pipeline flatten) in code comments or `PLAN.md` — not duplicated in every file.
+- Do not invent features in docs that are not in `PRD.md` / `PLAN.md` without asking.
+- Simulated demos/playgrounds must be labeled illustrative (`PRD.md` §9).
+- Prefer cross-links between docs over copy-pasting the same content.
+
+## Doc purpose split (do not collapse)
+
+- `PRD.md` — what/why
+- `PLAN.md` — how
+- `STRUCTURE.md` — where
+- `TASKS.md` — execution checklist
+- `README.md` — entry point for humans

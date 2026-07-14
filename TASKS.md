@@ -23,7 +23,7 @@ No product behavior yet; this unblocks every later milestone.
 - [ ] Add `.gitignore` (`__pycache__/`, `*.egg-info/`, `dist/`, `build/`, `.pytest_cache/`, `.mypy_cache/`, `.venv/`).
 - [ ] Choose and add a `LICENSE` file (MIT recommended — `PRD.md §7`).
 - [ ] Create `.github/workflows/ci.yml` with the three jobs from `PLAN.md §5` (core tests, bridge tests, dependency-isolation check).
-- [ ] Author `.cursor/rules/adaptron.mdc` capturing the non-negotiables listed in `STRUCTURE.md`.
+- [x] Author `.cursor/rules/*.mdc` capturing non-negotiables, architecture, Python standards, errors, tests, bridges, deps, docs, and AI workflow (see `STRUCTURE.md`).
 - [ ] Create empty package skeleton: `adaptron/__init__.py`, `adaptron/core/__init__.py`, `adaptron/bridges/__init__.py`, `tests/__init__.py`.
 - [x] Write `CONTRIBUTING.md` (dev setup, how to run tests/lint locally, PR expectations).
 - [ ] Create empty `CHANGELOG.md` with an `[Unreleased]` heading.

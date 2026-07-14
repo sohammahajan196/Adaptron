@@ -1,0 +1,37 @@
+---
+description: pytest conventions for core vs bridge tests
+globs: tests/**/*.py
+alwaysApply: false
+---
+
+# Testing
+
+Use **pytest**. Mirror module layout: one test file per core module + per bridge (`STRUCTURE.md`).
+
+## Coverage expectations
+
+- Test every public API: `wrap`, `register_adapter`, `Agent`, `Pipeline`, `>>`, errors.
+- Happy path **and** failure cases (`WrapError`, `NoAdapterError`, `PipelineExecutionError`).
+- Aim for high coverage on `adaptron/core/` — it must run with **zero** optional deps installed.
+
+## Core vs bridges
+
+- Core tests: no `langchain` / `crewai` imports; must pass in a bare environment.
+- Bridge tests: gate with `pytest.importorskip("langchain")` or `importorskip("crewai")`.
+- Include a regression that a framework object is **not** mis-wrapped by the plain-Python fallback.
+
+## Practices
+
+- Mock optional/external frameworks in unit tests; keep one e2e example assertion path for Milestone 8.
+- Prefer `caplog` for logging assertions (stage order, types present).
+- Assert construction-time failures by building the pipeline, not by calling `run()`.
+- No network / live LLM calls in unit tests unless the example explicitly requires them (and then document API keys).
+
+```python
+# GOOD — construction-time failure
+with pytest.raises(NoAdapterError, match="register_adapter"):
+    wrap(str_agent) >> wrap(dict_agent)
+
+# BAD — waiting until run() to discover the mismatch
+pipeline.run("x")
+```

@@ -27,7 +27,7 @@ adaptron/
 │   └── cross_framework_pipeline.py
 ├── tests/                        # one test file per core module + bridges
 ├── docs/playground/               # stretch-goal interactive demo
-├── .cursor/rules/adaptron.mdc     # Cursor project rules (see STRUCTURE.md)
+├── .cursor/rules/                 # Cursor project rules (see STRUCTURE.md)
 ├── PRD.md
 ├── PLAN.md
 ├── pyproject.toml                 # zero-dependency core, optional extras

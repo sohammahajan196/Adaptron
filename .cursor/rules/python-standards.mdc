@@ -1,0 +1,44 @@
+---
+description: Python style — typing, docstrings, clarity, performance for Adaptron
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Python Coding Standards
+
+Target: Python 3.10+. Prefer stdlib. Prefer explicit code over clever code.
+
+## Required practices
+
+- Full type hints on public functions, methods, and attributes.
+- Google-style docstrings on public APIs (`wrap`, `Agent`, `Pipeline`, `register_adapter`, exceptions, bridge `can_wrap`/`adapt`).
+- `@dataclass` for simple data holders when it improves clarity; avoid for types with complex identity/behavior.
+- Prefer `Enum` over magic strings for fixed sets of modes/statuses.
+- Meaningful names; functions small and single-purpose (SOLID where it fits without overengineering).
+- Prefer `pathlib.Path` over `os.path`.
+- Use context managers for files and other resources.
+- Avoid mutable global state except the intentional adapter registry (warn on overwrite; never silent).
+
+## Style & imports
+
+- Follow PEP 8; keep lines readable (target ~88–100 chars).
+- Import order: stdlib → third-party → local (`adaptron.*`). Absolute imports within the package.
+- Comments only where intent is non-obvious; never narrate the obvious.
+- No `# type: ignore` in `adaptron/core/` unless unavoidable and explained in a short comment.
+
+## Performance
+
+- Pipeline overhead must stay negligible vs LLM calls — keep adapter lookup O(1) exact-pair dict.
+- Avoid unnecessary copies/allocations in the hot path (`run()` loop).
+- Lazy-import bridges inside `wrap()` / bridge modules; never at core import time.
+- Optimize only when justified; prefer simple algorithms.
+
+## Anti-patterns
+
+```python
+# BAD — clever, unexplained
+stages = [*(p.stages if isinstance(p, Pipeline) else [p]) for p in parts]
+
+# GOOD — explicit flatten helper with a clear name
+def _flatten_stages(left, right) -> list: ...
+```

@@ -1,0 +1,47 @@
+---
+description: AdaptronError hierarchy — fail fast with actionable messages
+globs: adaptron/**/*.py
+alwaysApply: false
+---
+
+# Error Handling
+
+Fail fast. Never silently ignore exceptions. Never use bare `except:`.
+
+## Hierarchy (grow incrementally — do not invent parallel trees)
+
+```
+AdaptronError
+├── WrapError              # wrap() cannot adapt the object
+├── NoAdapterError         # construction-time type mismatch, no registry entry
+└── PipelineExecutionError # stage/adapter failed during run()
+```
+
+Raise these (or clear subclasses of `AdaptronError`). Do not leak raw third-party exceptions as the only signal without wrapping context.
+
+## Message requirements
+
+Every error must be diagnosable without reading Adaptron source:
+
+- **Which** stage/adapter failed (name)
+- **Which** types were involved (`source_type`, `target_type`)
+- **What** input was received (truncated preview when relevant)
+- **How** to fix it when possible
+
+```python
+# GOOD
+raise NoAdapterError(
+    f"No adapter for {source.__name__} -> {target.__name__}. "
+    f"Register one with: register_adapter({source.__name__}, {target.__name__}, fn)"
+)
+
+# BAD
+raise Exception("type error")
+```
+
+## Rules
+
+- Construction mismatches → `NoAdapterError` at pipeline build time, not inside `run()`.
+- Mid-pipeline agent failure → wrap in `PipelineExecutionError` with stage + input context.
+- Adapter function raising mid-conversion → wrap in an `AdaptronError` subclass; do not pass bad data downstream.
+- Prefer `except SomeError:` / `except Exception as exc:` with re-raise or wrap; never swallow.

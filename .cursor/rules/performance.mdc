@@ -1,0 +1,23 @@
+---
+description: Keep pipeline overhead negligible relative to LLM calls
+globs: adaptron/core/**/*.py
+alwaysApply: false
+---
+
+# Performance
+
+Adaptron sits in front of LLM agents. Wrapping, port checks, and adapters must add negligible latency (`PRD.md` §7).
+
+## Do
+
+- Keep adapter registry as `dict[tuple[type, type], Callable]` — O(1) exact lookup.
+- Reuse stage lists; flatten pipelines without deep recursion when chaining many stages.
+- Truncate log previews; never dump large payloads by default.
+- Lazy-import optional frameworks so `import adaptron` stays cheap.
+
+## Do not
+
+- Walk MRO / try multiple adapters per connection in v1 (out of scope and slower / ambiguous).
+- Allocate heavy temporary structures in the `run()` loop.
+- Add caching layers, thread pools, or async runtimes “for performance” without a measured need.
+- Optimize prematurely — profile only if overhead is measurable against typical LLM call times.

@@ -1,0 +1,51 @@
+---
+description: Module boundaries, wrap order, adapter system, and pipeline flow
+globs: adaptron/**/*.py
+alwaysApply: false
+---
+
+# Architecture
+
+Follow `PLAN.md` and `STRUCTURE.md`. Do not invent parallel abstractions.
+
+## Module responsibilities
+
+| Location | Owns | Must not |
+|---|---|---|
+| `adaptron/core/agent.py` | `Agent`, type inference | Know frameworks |
+| `adaptron/core/pipeline.py` | `>>`, flatten, `run()`, construction-time resolve | Call LLM APIs |
+| `adaptron/core/adapters.py` | Registry + exact-pair lookup | Import third-party types |
+| `adaptron/core/logging.py` | stdlib verbose stage logs | Depend on extras |
+| `adaptron/core/errors.py` | `AdaptronError` hierarchy | Swallow failures |
+| `adaptron/bridges/*` | `can_wrap` / `adapt` for one framework | Leak imports into core |
+
+Prefer composition over inheritance. Keep stages loosely coupled; extend via adapters/bridges, not by editing pipeline internals for each new framework.
+
+## Never bypass the adapter system
+
+- Type conversion between agents happens only via registered adapters inserted at construction.
+- Do not hard-code conversions inside `Pipeline.run()` or inside a bridge’s `__call__` for cross-agent handoffs.
+- Do not add “helpful” automatic coercion beyond exact registry lookup.
+
+## `wrap()` detection order (correctness-critical)
+
+Probe **most specific → least specific**. First match wins:
+
+1. LangChain bridge (if importable)
+2. CrewAI bridge (if importable)
+3. Plain-Python callable (catch-all)
+
+Why: framework objects are also callables. If plain-Python runs first, bridges never win and agents are mis-wrapped.
+
+## Pipeline rules
+
+- `a >> b >> c` flattens to one `Pipeline`, never nested pipelines.
+- `Pipeline` exposes `.input_type` / `.output_type` from first/last stage (composable like `Agent`).
+- Execution is synchronous, single-process, linear. Preserve stage order; thread output → next input.
+- Log every agent and adapter stage when `verbose=True`.
+
+## Type inference priority
+
+1. Explicit types passed to `wrap()`
+2. `typing.get_type_hints` on the callable
+3. `typing.Any` (skip adapter matching for that port)
