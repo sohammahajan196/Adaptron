@@ -1,6 +1,6 @@
 # Project Folder Structure
 
-This document lays out the full repository layout implied by [PLAN.md](./PLAN.md) and [PRD.md](./PRD.md), with a short explanation of every folder and major file. It is the reference structure to scaffold when implementation starts (see [TASKS.md](./TASKS.md) Milestone 0). For *how* the core modules work internally (data model, resolution algorithms, milestone details), see [PLAN.md §2-3](./PLAN.md) — this document only covers *what lives where and why it's organized that way*, to avoid repeating that content.
+This document lays out the full repository layout implied by [PLAN.md](./PLAN.md) and [PRD.md](./PRD.md), with a short explanation of every folder and major file. It is the reference structure to scaffold when implementation starts (see [TASKS.md](./TASKS.md) Phase 0). For *how* the core modules work internally (data model, resolution algorithms, milestone details), see [PLAN.md §2-3](./PLAN.md) — this document only covers *what lives where and why it's organized that way*, to avoid repeating that content.
 
 ```
 adaptron/
@@ -65,7 +65,7 @@ adaptron/
 - **`PRD.md`** — the product requirements: problem statement, goals, personas, user stories, functional/non-functional requirements, success metrics, risks, and post-v1 considerations. The source of truth for *what* and *why*.
 - **`PLAN.md`** — the technical architecture: repo layout summary, core data model (`Agent`, `Pipeline`, adapter registry, bridges), milestone-by-milestone implementation notes, testing/CI strategy, and packaging. The source of truth for *how* the system is built.
 - **`STRUCTURE.md`** — this file; keeps the intended repo layout explicit and reviewable, and explains the placement rationale for each file/folder.
-- **`TASKS.md`** — the granular, checkbox-level execution tracker. Where `PLAN.md`'s milestones describe *what each milestone must achieve architecturally*, `TASKS.md` breaks each one into small, checkable implementation steps meant to be ticked off during development. `PLAN.md` stays stable as a reference; `TASKS.md` is expected to change constantly as work proceeds.
+- **`TASKS.md`** — the phase-based implementation roadmap. Where `PLAN.md`'s milestones describe *what each milestone must achieve architecturally*, `TASKS.md` turns them into Phases 0–9 with session-sized tasks (goal, files, dependencies, acceptance criteria, subtasks). `PLAN.md` stays stable as a reference; `TASKS.md` is expected to change constantly as work proceeds.
 - **`README.md`** — the entry point for a new developer or evaluator: the pitch, install instructions (including optional extras), a before/after code example, and links to the docs above.
 - **`CONTRIBUTING.md`** — how to set up a dev environment, run tests/lint/type-checks locally, the branch-per-milestone workflow from `PLAN.md §3`, and the PR expectations (tests required, one milestone per PR).
 - **`CHANGELOG.md`** — a running log of released versions, following [Keep a Changelog](https://keepachangelog.com/) conventions and the Semantic Versioning policy from `PLAN.md §5`.

@@ -1,6 +1,6 @@
 # Contributing to Adaptron
 
-Adaptron is developed milestone-by-milestone, as tracked in [TASKS.md](./TASKS.md) and designed in [PLAN.md](./PLAN.md). This guide covers how to set up a development environment and the workflow contributions are expected to follow, once implementation begins.
+Adaptron is developed phase-by-phase, as tracked in [TASKS.md](./TASKS.md) and designed in [PLAN.md](./PLAN.md). This guide covers how to set up a development environment and the workflow contributions are expected to follow, once implementation begins.
 
 ## Development setup
 
@@ -27,8 +27,8 @@ All four should pass before opening a pull request — they mirror the CI jobs i
 
 ## Workflow
 
-- **One milestone per branch/PR.** Each milestone in [PLAN.md §3](./PLAN.md) and [TASKS.md](./TASKS.md) should land as its own pull request with its own tests, rather than being bundled with unrelated work.
-- **Tests are required, not optional.** A milestone isn't done until its corresponding checklist items in `TASKS.md` are checked off and its tests pass in CI.
+- **One phase per branch/PR.** Each phase in [TASKS.md](./TASKS.md) (aligned with [PLAN.md §3](./PLAN.md)) should land as its own pull request with its own tests, rather than being bundled with unrelated work. Large phases may also ship as one PR per Task X.Y.
+- **Tests are required, not optional.** A phase isn't done until its Phase Completion Checklist in `TASKS.md` is satisfied and its tests pass in CI.
 - **Core stays dependency-free.** Nothing under `adaptron/core/` may import `langchain`, `crewai`, or any other optional dependency, even conditionally. Framework-specific code belongs in `adaptron/bridges/` only (see [STRUCTURE.md](./STRUCTURE.md)).
 - **Errors must be actionable.** Any new exception should name the failing stage and the offending input/types, per the `Debuggability` requirement in [PRD.md §7](./PRD.md).
 - **Update `CHANGELOG.md`** for any user-facing change, following [Keep a Changelog](https://keepachangelog.com/) format.

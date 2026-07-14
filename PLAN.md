@@ -1,7 +1,7 @@
 # Adaptron — Technical Plan
 
 **Status:** Draft
-**Related docs:** [PRD.md](./PRD.md) — product requirements this plan implements · [STRUCTURE.md](./STRUCTURE.md) — full repo layout and file-by-file rationale · [TASKS.md](./TASKS.md) — granular execution checklist for these milestones
+**Related docs:** [PRD.md](./PRD.md) — product requirements this plan implements · [STRUCTURE.md](./STRUCTURE.md) — full repo layout and file-by-file rationale · [TASKS.md](./TASKS.md) — phase-based implementation roadmap
 
 ---
 
@@ -105,11 +105,10 @@ adaptron/
 
 ## 3. Milestone-by-milestone implementation notes
 
-Mirrors PRD §11, numbered 1-9 to match. [TASKS.md](./TASKS.md) prepends
-a **Milestone 0** for one-time repo scaffolding (license, CI, pyproject
-skeleton, Cursor rules) that has no corresponding PRD milestone since
-it produces no product-facing behavior. Each milestone below should be
-a separate branch/PR with its own tests before moving to the next.
+Mirrors PRD §11, numbered 1-9 to match. [TASKS.md](./TASKS.md) turns these
+into **Phases 0–9** (Phase 0 = scaffolding with no PRD counterpart) and
+splits each into session-sized tasks with acceptance criteria. Prefer
+one phase (or one Task X.Y) per branch/PR with tests before moving on.
 
 ### Milestone 1 — Core agent/port abstraction
 
@@ -269,7 +268,7 @@ a collection of passing tests locally:
   crewai = ["crewai>=0.3,<0.4"]
   ```
   These ranges are illustrative — confirm current stable major versions
-  for both frameworks at implementation time (Milestone 0) and pin
+  for both frameworks at implementation time (Phase 0 / Phase 5–6) and pin
   accordingly; the exact bounds matter less than the *policy* of
   pinning tightly and revisiting deliberately.
 - Version pins on extras are intentional (see PRD §9 risk: bridges break

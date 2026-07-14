@@ -99,7 +99,7 @@ Adaptron is under active initial development, built milestone-by-milestone (see 
 8. Example pipelines + this README's flagship demo
 9. *(Stretch)* Interactive playground
 
-The granular, checkbox-level task list for each milestone lives in [TASKS.md](./TASKS.md).
+The phase-based implementation roadmap lives in [TASKS.md](./TASKS.md).
 
 ## Documentation
 
@@ -108,12 +108,12 @@ The granular, checkbox-level task list for each milestone lives in [TASKS.md](./
 | [PRD.md](./PRD.md) | Product requirements — problem, goals, scope, user stories, success metrics |
 | [PLAN.md](./PLAN.md) | Technical architecture — data model, resolution algorithms, milestones |
 | [STRUCTURE.md](./STRUCTURE.md) | Repository layout and file-by-file rationale |
-| [TASKS.md](./TASKS.md) | Granular execution checklist |
+| [TASKS.md](./TASKS.md) | Phase-based implementation roadmap |
 
 ## Contributing
 
-Contributions are welcome once the core scaffolding (Milestone 0) lands. See [CONTRIBUTING.md](./CONTRIBUTING.md) for dev setup, how to run tests/lint/type-checks locally, and the one-milestone-per-PR workflow this project follows.
+Contributions are welcome once the core scaffolding (Phase 0) lands. See [CONTRIBUTING.md](./CONTRIBUTING.md) for dev setup, how to run tests/lint/type-checks locally, and the one-phase-per-PR workflow this project follows.
 
 ## License
 
-Adaptron will be released under the MIT License (recommended in [PRD.md §7](./PRD.md); the `LICENSE` file itself is added as part of Milestone 0 scaffolding — see [TASKS.md](./TASKS.md)).
+Adaptron will be released under the MIT License (recommended in [PRD.md §7](./PRD.md); the `LICENSE` file itself is added as part of Phase 0 scaffolding — see [TASKS.md](./TASKS.md)).
