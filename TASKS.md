@@ -491,9 +491,9 @@ Stdlib logging of every agent/adapter stage, toggled by `verbose`, silent by def
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Create logger named `adaptron` (or `adaptron.pipeline`)
-- [ ] Implement stage log formatter: name, in-type, out-type, truncated preview
-- [ ] Unit-testable pure helpers for truncation if non-trivial
+- [x] Create logger named `adaptron` (or `adaptron.pipeline`)
+- [x] Implement stage log formatter: name, in-type, out-type, truncated preview
+- [x] Unit-testable pure helpers for truncation if non-trivial
 
 ### Task 4.2 — Wire verbose into `run()`
 **Type:** Core  
@@ -504,9 +504,9 @@ Stdlib logging of every agent/adapter stage, toggled by `verbose`, silent by def
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Add `verbose: bool = False` to `run`
-- [ ] Log each stage including inserted adapters
-- [ ] Keep default quiet (no handler noise unless user configured logging)
+- [x] Add `verbose: bool = False` to `run`
+- [x] Log each stage including inserted adapters
+- [x] Keep default quiet (no handler noise unless user configured logging)
 
 ### Task 4.3 — Logging tests
 **Type:** Testing  
@@ -516,9 +516,9 @@ Stdlib logging of every agent/adapter stage, toggled by `verbose`, silent by def
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Capture logs with `caplog` / logger level INFO
-- [ ] Assert order includes adapter stage when adaptation occurred
-- [ ] Assert silent path produces no adaptron stage logs (or only when verbose)
+- [x] Capture logs with `caplog` / logger level INFO
+- [x] Assert order includes adapter stage when adaptation occurred
+- [x] Assert silent path produces no adaptron stage logs (or only when verbose)
 
 ### Task 4.4 — Phase 4 documentation
 **Type:** Documentation  
@@ -527,14 +527,14 @@ Stdlib logging of every agent/adapter stage, toggled by `verbose`, silent by def
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md`
-- [ ] *(Optional)* Add log sample to README only if README already describes verbose (keep in sync)
+- [x] Update `CHANGELOG.md`
+- [x] *(Optional)* Add log sample to README only if README already describes verbose (keep in sync)
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 

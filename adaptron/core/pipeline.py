@@ -14,6 +14,7 @@ from typing import Any, Union
 from adaptron.core.adapters import get_adapter
 from adaptron.core.agent import Agent
 from adaptron.core.errors import NoAdapterError, PipelineExecutionError
+from adaptron.core.logging import log_stage
 
 PipelineStage = Union[Agent, "Pipeline"]
 
@@ -132,14 +133,19 @@ class Pipeline:
             return NotImplemented
         return Pipeline([*_flatten(other), *self.stages])
 
-    def run(self, value: Any) -> Any:
+    def run(self, value: Any, *, verbose: bool = False) -> Any:
         """Execute all stages in order, threading each output into the next.
 
-        No logging happens yet — this milestone runs silently by default;
-        verbose per-stage logging arrives in Phase 4 (``core/logging.py``).
+        Silent by default: no log records or handler noise unless the
+        caller opts in with ``verbose=True``. Verbosity never changes the
+        computed output (PRD §6.5, PLAN.md §3 Milestone 4).
 
         Args:
             value: The input to the first stage.
+            verbose: If ``True``, emit one INFO record per stage (agent or
+                inserted adapter, in execution order) via the ``adaptron``
+                logger (``core/logging.py``), naming the stage, its
+                input/output types, and truncated input/output previews.
 
         Returns:
             The output of the last stage.
@@ -151,8 +157,17 @@ class Pipeline:
                 ``__cause__``.
         """
         for stage in self.stages:
+            stage_input = value
             try:
                 value = stage(value)
             except Exception as exc:
                 raise PipelineExecutionError(stage.name, value) from exc
+            if verbose:
+                log_stage(
+                    stage.name,
+                    stage.input_type,
+                    stage.output_type,
+                    stage_input,
+                    value,
+                )
         return value

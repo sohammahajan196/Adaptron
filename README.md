@@ -51,17 +51,15 @@ The core package never pulls in LangChain or CrewAI — framework support is str
 ## Quickstart
 
 ```python
-from adaptron import wrap, register_adapter
+from adaptron import wrap
 
 def to_upper(text: str) -> str:
     return text.upper()
 
-def word_count(text: str) -> dict:
-    return {"words": len(text.split())}
+def word_count(payload: dict) -> dict:
+    return {"words": len(payload["text"].split())}
 
-# Two plain-Python agents with a genuine type mismatch: str -> dict expected downstream.
-register_adapter(str, dict, lambda s: {"text": s})
-
+# Default str -> dict adapter inserts automatically (exact type match only).
 pipeline = wrap(to_upper) >> wrap(word_count)
 print(pipeline.run("hello adaptron"))
 # {'words': 2}
@@ -71,9 +69,9 @@ Run with `verbose=True` to see exactly which stages and adapters executed:
 
 ```python
 pipeline.run("hello adaptron", verbose=True)
-# [adaptron] to_upper        str -> str    "hello adaptron" -> "HELLO ADAPTRON"
-# [adaptron] str->dict adapter str -> dict  "HELLO ADAPTRON" -> {'text': 'HELLO ADAPTRON'}
-# [adaptron] word_count      dict -> dict  {...} -> {'words': 2}
+# stage='to_upper' in=str out=str input='hello adaptron' output='HELLO ADAPTRON'
+# stage='adapter<str->dict>' in=str out=dict input='HELLO ADAPTRON' output={'text': 'HELLO ADAPTRON'}
+# stage='word_count' in=dict out=dict input={'text': 'HELLO ADAPTRON'} output={'words': 2}
 ```
 
 See [`examples/`](./examples) for a runnable version of this, plus the flagship `cross_framework_pipeline.py` example combining a real LangChain agent, a real CrewAI agent, and a plain Python function.

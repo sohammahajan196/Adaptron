@@ -32,3 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Default adapters: `str → dict` (`{"text": ...}`) and demo
   `str → Message`. Public exports: `wrap`, `Agent`, `Pipeline`,
   `register_adapter`.
+- Phase 4 logging/observability: stdlib `adaptron` logger with truncated
+  stage previews; `Pipeline.run(..., verbose=False)` is silent by default
+  and `verbose=True` emits one INFO line per agent and inserted adapter
+  stage (name, in/out types, input/output previews) in execution order.
