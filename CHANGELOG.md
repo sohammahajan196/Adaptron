@@ -23,3 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   outputs, and `PipelineExecutionError` for mid-pipeline failures.
   Public exports: `wrap`, `Agent`, `Pipeline`. Adapters still stubbed
   pending Phase 3.
+- Phase 3 adapter registry and construction-time auto-adaptation:
+  `register_adapter(source, target, fn)` with O(1) exact `(type, type)`
+  lookup (no MRO/`isinstance` matching in v1), overwrite via
+  `UserWarning`, and `NoAdapterError` raised when chaining with `>>` if
+  types mismatch and no adapter is registered — never deferred to
+  `run()`. Exact type match or `Any` on either side skips adaptation.
+  Default adapters: `str → dict` (`{"text": ...}`) and demo
+  `str → Message`. Public exports: `wrap`, `Agent`, `Pipeline`,
+  `register_adapter`.

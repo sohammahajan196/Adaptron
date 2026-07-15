@@ -92,3 +92,59 @@ class PipelineExecutionError(AdaptronError):
                 "upstream output that produced this input."
             )
         super().__init__(message)
+
+
+def _type_name(tp: Any) -> str:
+    """Return a short display name for a type used in error messages."""
+    if tp is Any:
+        return "Any"
+    name = getattr(tp, "__name__", None)
+    if isinstance(name, str):
+        return name
+    return repr(tp)
+
+
+class NoAdapterError(AdaptronError):
+    """Raised when adjacent pipeline stages have incompatible types.
+
+    Raised at **construction** time (Milestone 3 / Phase 3) when chaining
+    with ``>>`` if the left stage's output type does not match the right
+    stage's input type and no exact ``(source, target)`` adapter is
+    registered (PLAN.md §2.3, PRD §6.6). This is never deferred to
+    ``run()``.
+
+    Attributes:
+        source_type: Output type of the upstream stage.
+        target_type: Input type of the downstream stage.
+
+    Message contract (actionable, PRD §7 Debuggability):
+
+    - Name **both** mismatched types.
+    - Suggest the exact ``register_adapter(...)`` call to fix it.
+
+    Example::
+
+        raise NoAdapterError(str, dict)
+        # suggests: register_adapter(str, dict, fn)
+    """
+
+    source_type: Any
+    target_type: Any
+
+    def __init__(
+        self,
+        source_type: Any,
+        target_type: Any,
+        *,
+        message: str | None = None,
+    ) -> None:
+        self.source_type = source_type
+        self.target_type = target_type
+        if message is None:
+            src = _type_name(source_type)
+            tgt = _type_name(target_type)
+            message = (
+                f"No adapter for {src} -> {tgt}. "
+                f"Register one with: register_adapter({src}, {tgt}, fn)"
+            )
+        super().__init__(message)

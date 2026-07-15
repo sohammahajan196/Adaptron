@@ -384,9 +384,9 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Implement `NoAdapterError` with source/target type context
-- [ ] Docstring + example suggested fix string format
-- [ ] *(Testing)* Deferred to Task 3.4
+- [x] Implement `NoAdapterError` with source/target type context
+- [x] Docstring + example suggested fix string format
+- [x] *(Testing)* Deferred to Task 3.4
 
 ### Task 3.2 — Registry + register_adapter
 **Type:** Core  
@@ -397,11 +397,11 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement registry `dict[tuple[type, type], Callable]`
-- [ ] Implement `register_adapter(source, target, fn)`
-- [ ] Warn on overwrite (not silent)
-- [ ] Lookup helper used by Pipeline (`resolve` / `get_adapter`)
-- [ ] Export `register_adapter` from `adaptron/__init__.py`
+- [x] Implement registry `dict[tuple[type, type], Callable]`
+- [x] Implement `register_adapter(source, target, fn)`
+- [x] Warn on overwrite (not silent)
+- [x] Lookup helper used by Pipeline (`resolve` / `get_adapter`)
+- [x] Export `register_adapter` from `adaptron/__init__.py`
 
 ### Task 3.3 — Construction-time resolution in Pipeline
 **Type:** Core  
@@ -412,11 +412,11 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** High
 
 #### Subtasks
-- [ ] Replace Phase 2 stub with real resolution between adjacent stages
-- [ ] Insert adapter as its own stage (named for logging later)
-- [ ] Skip when input or output type is `Any`
-- [ ] Raise `NoAdapterError` immediately when unresolved
-- [ ] Preserve flatten/composability behavior from Phase 2
+- [x] Replace Phase 2 stub with real resolution between adjacent stages
+- [x] Insert adapter as its own stage (named for logging later)
+- [x] Skip when input or output type is `Any`
+- [x] Raise `NoAdapterError` immediately when unresolved
+- [x] Preserve flatten/composability behavior from Phase 2
 
 ### Task 3.4 — Default adapters
 **Type:** Core  
@@ -427,9 +427,9 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Register default `str → dict`
-- [ ] Add demo `Message` type + `str → Message` adapter (docs/demo)
-- [ ] Ensure defaults load without user action when package imported (or document explicit import — pick one and stick to README later)
+- [x] Register default `str → dict`
+- [x] Add demo `Message` type + `str → Message` adapter (docs/demo)
+- [x] Ensure defaults load without user action when package imported (or document explicit import — pick one and stick to README later)
 
 ### Task 3.5 — Adapter tests
 **Type:** Testing  
@@ -439,11 +439,11 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Test registered mismatch auto-inserts and `run()` succeeds
-- [ ] Test unregistered mismatch raises at `a >> b`, not at `run()`
-- [ ] Test re-registration emits warning
-- [ ] Test `Any` skips resolution
-- [ ] Run full core suite
+- [x] Test registered mismatch auto-inserts and `run()` succeeds
+- [x] Test unregistered mismatch raises at `a >> b`, not at `run()`
+- [x] Test re-registration emits warning
+- [x] Test `Any` skips resolution
+- [x] Run full core suite
 
 ### Task 3.6 — Phase 3 documentation
 **Type:** Documentation  
@@ -452,14 +452,14 @@ Exact-pair adapter registry, construction-time insertion or `NoAdapterError`, de
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md`
-- [ ] Ensure error message text matches docs suggestion
+- [x] Update `CHANGELOG.md`
+- [x] Ensure error message text matches docs suggestion
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 

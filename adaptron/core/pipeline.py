@@ -11,8 +11,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Union
 
+from adaptron.core.adapters import get_adapter
 from adaptron.core.agent import Agent
-from adaptron.core.errors import PipelineExecutionError
+from adaptron.core.errors import NoAdapterError, PipelineExecutionError
 
 PipelineStage = Union[Agent, "Pipeline"]
 
@@ -29,16 +30,46 @@ def _flatten(stage: PipelineStage) -> list[Agent]:
     return [stage]
 
 
-def _check_adjacent_compatible(left: Agent, right: Agent) -> None:
-    """Stubbed construction-time compatibility check (PLAN.md §2.2/§2.3).
+def _type_name(tp: Any) -> str:
+    """Return a short display name for a type, used in adapter stage names."""
+    if tp is Any:
+        return "Any"
+    name = getattr(tp, "__name__", None)
+    return name if isinstance(name, str) else repr(tp)
 
-    Always treats adjacent stages as compatible and never inserts an
-    adapter. Phase 3 replaces this with real adapter-registry resolution:
-    exact type match or ``Any`` passes through, a registered adapter is
-    inserted as an extra stage, and an unregistered mismatch raises
-    ``NoAdapterError`` at construction time (not at ``run()``).
+
+def _resolve_adjacent(left: Agent, right: Agent) -> list[Agent]:
+    """Resolve compatibility between two adjacent stages (PLAN.md §2.3).
+
+    Returns the adapter stage to insert between ``left`` and ``right`` as a
+    single-element list, or an empty list if none is needed:
+
+    - Exact type match, or ``Any`` on either side, is treated as compatible
+      and needs no adapter (``Any`` skips resolution entirely, per PRD §6.2).
+    - Otherwise, an exact ``(source_type, target_type)`` adapter must be
+      registered (``register_adapter``); it is wrapped in its own named
+      ``Agent`` stage so it is visible in logs later (Phase 4).
+    - If no such adapter is registered, raises ``NoAdapterError``
+      immediately — construction time, never deferred to ``run()``.
     """
-    return None
+    source_type = left.output_type
+    target_type = right.input_type
+
+    if source_type is target_type or source_type is Any or target_type is Any:
+        return []
+
+    adapter_fn = get_adapter(source_type, target_type)
+    if adapter_fn is None:
+        raise NoAdapterError(source_type, target_type)
+
+    adapter_name = f"adapter<{_type_name(source_type)}->{_type_name(target_type)}>"
+    adapter_stage = Agent(
+        adapter_fn,
+        input_type=source_type,
+        output_type=target_type,
+        name=adapter_name,
+    )
+    return [adapter_stage]
 
 
 @dataclass
@@ -56,13 +87,16 @@ class Pipeline:
     lets a fully-built ``Pipeline`` be used as either side of ``>>`` like
     any other stage.
 
-    No adapter resolution happens yet in this milestone — adjacent-stage
-    compatibility is a no-op stub (``_check_adjacent_compatible``); every
-    pair of stages is treated as compatible pending Phase 3.
+    Adjacent-stage compatibility is resolved at construction time
+    (PLAN.md §2.3): an exact type match, or ``Any`` on either side, needs
+    no adapter; a registered ``(source_type, target_type)`` adapter is
+    inserted as its own stage; an unresolved mismatch raises
+    ``NoAdapterError`` immediately — never deferred to ``run()``.
 
     Attributes:
         stages: The ordered, flat list of ``Agent`` stages to run in
-            sequence. Must contain at least one stage.
+            sequence (including any inserted adapter stages). Must contain
+            at least one stage.
     """
 
     stages: list[Agent] = field(default_factory=list)
@@ -70,8 +104,11 @@ class Pipeline:
     def __post_init__(self) -> None:
         if not self.stages:
             raise ValueError("Pipeline requires at least one stage.")
+        resolved: list[Agent] = [self.stages[0]]
         for left, right in zip(self.stages, self.stages[1:], strict=False):
-            _check_adjacent_compatible(left, right)
+            resolved.extend(_resolve_adjacent(left, right))
+            resolved.append(right)
+        self.stages = resolved
 
     @property
     def input_type(self) -> Any:
