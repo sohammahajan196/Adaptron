@@ -6,7 +6,10 @@ import inspect
 import typing
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from adaptron.core.pipeline import Pipeline, PipelineStage
 
 
 def _target_for_introspection(obj: Any) -> Callable[..., Any]:
@@ -106,3 +109,28 @@ class Agent:
     def __call__(self, value: Any) -> Any:
         """Invoke the wrapped callable with a single input value."""
         return self.func(value)
+
+    def __rshift__(self, other: PipelineStage) -> Pipeline:
+        """Chain ``other`` after this agent, building a ``Pipeline``.
+
+        ``a >> b`` returns a ``Pipeline`` containing ``[a, b]``; if ``other``
+        is itself a ``Pipeline``, its stages are flattened in rather than
+        nested (PLAN.md §2.2).
+        """
+        from adaptron.core.pipeline import Pipeline, _flatten
+
+        if not isinstance(other, (Agent, Pipeline)):
+            return NotImplemented
+        return Pipeline([self, *_flatten(other)])
+
+    def __rrshift__(self, other: PipelineStage) -> Pipeline:
+        """Chain this agent after ``other``, building a ``Pipeline``.
+
+        Mirrors ``__rshift__`` so ``a >> b`` works regardless of which side
+        defines the operator (PLAN.md §2.2).
+        """
+        from adaptron.core.pipeline import Pipeline, _flatten
+
+        if not isinstance(other, (Agent, Pipeline)):
+            return NotImplemented
+        return Pipeline([*_flatten(other), self])

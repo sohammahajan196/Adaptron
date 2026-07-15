@@ -286,9 +286,9 @@ Linear, composable pipelines of Agents with sync `run()`, flattening, and `Pipel
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Add `PipelineExecutionError` with fields/message for stage + input preview
-- [ ] Docstring documents when it is raised
-- [ ] *(Testing)* Deferred to Task 2.4
+- [x] Add `PipelineExecutionError` with fields/message for stage + input preview
+- [x] Docstring documents when it is raised
+- [x] *(Testing)* Deferred to Task 2.4
 
 ### Task 2.2 — Pipeline structure + `>>` flattening
 **Type:** Core  
@@ -300,12 +300,12 @@ Linear, composable pipelines of Agents with sync `run()`, flattening, and `Pipel
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement `Pipeline` storing ordered stages
-- [ ] Implement `Agent.__rshift__` / `__rrshift__`
-- [ ] Implement `Pipeline.__rshift__` (and left-side if needed) for composability
-- [ ] Flatten so chains never nest Pipeline-in-Pipeline as stages
-- [ ] Expose `.input_type` / `.output_type`
-- [ ] Stub compatibility check (always pass) pending Phase 3
+- [x] Implement `Pipeline` storing ordered stages
+- [x] Implement `Agent.__rshift__` / `__rrshift__`
+- [x] Implement `Pipeline.__rshift__` (and left-side if needed) for composability
+- [x] Flatten so chains never nest Pipeline-in-Pipeline as stages
+- [x] Expose `.input_type` / `.output_type`
+- [x] Stub compatibility check (always pass) pending Phase 3
 
 ### Task 2.3 — `Pipeline.run()` + export
 **Type:** Core  
@@ -316,10 +316,10 @@ Linear, composable pipelines of Agents with sync `run()`, flattening, and `Pipel
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement `run(input)` loop
-- [ ] Catch stage exceptions → `PipelineExecutionError`
-- [ ] Export `Pipeline` from `adaptron/__init__.py`
-- [ ] Silent logging default (verbose arrives Phase 4)
+- [x] Implement `run(input)` loop
+- [x] Catch stage exceptions → `PipelineExecutionError`
+- [x] Export `Pipeline` from `adaptron/__init__.py`
+- [x] Silent logging default (verbose arrives Phase 4)
 
 ### Task 2.4 — Pipeline tests
 **Type:** Testing  
@@ -330,11 +330,11 @@ Linear, composable pipelines of Agents with sync `run()`, flattening, and `Pipel
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Test 2-stage and 3-stage correct output
-- [ ] Assert `a >> b >> c` is single Pipeline, not nested
-- [ ] Assert `(a >> b) >> c` equals flatten of three agents
-- [ ] Assert mid-pipeline failure raises `PipelineExecutionError` with stage context
-- [ ] Run `pytest tests/test_pipeline.py tests/test_agent.py`
+- [x] Test 2-stage and 3-stage correct output
+- [x] Assert `a >> b >> c` is single Pipeline, not nested
+- [x] Assert `(a >> b) >> c` equals flatten of three agents
+- [x] Assert mid-pipeline failure raises `PipelineExecutionError` with stage context
+- [x] Run `pytest tests/test_pipeline.py tests/test_agent.py`
 
 ### Task 2.5 — Phase 2 documentation
 **Type:** Documentation  
@@ -343,14 +343,14 @@ Linear, composable pipelines of Agents with sync `run()`, flattening, and `Pipel
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md`
-- [ ] Optionally add one-line usage snippet comment in `pipeline.py` module docstring
+- [x] Update `CHANGELOG.md`
+- [x] Optionally add one-line usage snippet comment in `pipeline.py` module docstring
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 

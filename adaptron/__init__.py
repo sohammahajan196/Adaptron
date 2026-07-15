@@ -3,7 +3,8 @@
 Public API only (STRUCTURE.md): ``wrap``, ``register_adapter``, ``Pipeline``,
 ``Agent``. ``wrap()`` currently detects plain-Python callables only; the
 LangChain and CrewAI bridges are probed ahead of this catch-all starting in
-later milestones (PLAN.md §2.4) and are not wired in yet.
+later milestones (PLAN.md §2.4) and are not wired in yet. ``register_adapter``
+is not exported yet — the adapter registry arrives in Phase 3.
 """
 
 from __future__ import annotations
@@ -13,8 +14,9 @@ from typing import Any
 
 from adaptron.core.agent import Agent
 from adaptron.core.errors import WrapError
+from adaptron.core.pipeline import Pipeline
 
-__all__ = ["Agent", "wrap"]
+__all__ = ["Agent", "Pipeline", "wrap"]
 
 
 def wrap(

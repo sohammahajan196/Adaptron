@@ -18,3 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `Agent` with type inference (explicit → hints → `Any`), and plain-Python
   `wrap()` for functions and `__call__` instances (no framework bridges yet).
   Public exports: `wrap`, `Agent`.
+- Phase 2 linear pipelines: `Pipeline` with the `>>` operator (flattens
+  nested chains such as `(a >> b) >> c`), sync `run()` that threads stage
+  outputs, and `PipelineExecutionError` for mid-pipeline failures.
+  Public exports: `wrap`, `Agent`, `Pipeline`. Adapters still stubbed
+  pending Phase 3.
