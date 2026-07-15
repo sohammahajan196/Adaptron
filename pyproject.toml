@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaptron"
+version = "0.1.0"
+description = "Connect AI agents from different frameworks into one pipeline — without writing glue code."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = []
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+# Bridge pins are stubs for Phase 0; refine against current stable APIs in Phases 5–6.
+langchain = ["langchain>=1.0,<2"]
+crewai = ["crewai>=1.0,<2"]
+dev = [
+    "pytest>=8.0,<10",
+    "ruff>=0.8,<1",
+    "mypy>=1.11,<3",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["adaptron*"]
