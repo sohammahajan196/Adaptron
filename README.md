@@ -41,12 +41,12 @@ Adaptron detects that the LangChain agent's output type doesn't match the CrewAI
 
 ```bash
 pip install adaptron              # core library, zero third-party dependencies
-pip install adaptron[langchain]   # + LangChain bridge
-pip install adaptron[crewai]      # + CrewAI bridge
+pip install adaptron[langchain]   # + LangChain bridge (pinned langchain>=1.3,<1.4)
+pip install adaptron[crewai]      # + CrewAI bridge (Phase 6; pin TBD)
 pip install adaptron[langchain,crewai]  # both
 ```
 
-The core package never pulls in LangChain or CrewAI — framework support is strictly opt-in via extras.
+The core package never pulls in LangChain or CrewAI — framework support is strictly opt-in via extras. With `[langchain]` installed, `wrap()` detects LangChain Runnable/Chain-shaped objects before the plain-Python fallback.
 
 ## Quickstart
 

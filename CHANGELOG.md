@@ -36,3 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stage previews; `Pipeline.run(..., verbose=False)` is silent by default
   and `verbose=True` emits one INFO line per agent and inserted adapter
   stage (name, in/out types, input/output previews) in execution order.
+- Phase 5 LangChain bridge (optional extra `adaptron[langchain]`, pinned
+  `langchain>=1.3,<1.4`): duck-typed `can_wrap`/`adapt` for Runnable and
+  legacy Chain shapes; `wrap()` probes LangChain before the plain-Python
+  catch-all (and before CrewAI, Phase 6); defaults bridged types to
+  `str → str`. Bridge is skipped when the extra is not installed. Gated
+  tests in `tests/test_bridges_langchain.py`.

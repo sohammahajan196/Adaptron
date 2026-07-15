@@ -568,9 +568,9 @@ Optional, duck-typed LangChain bridge probed **before** plain-Python fallback; l
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Research current stable LangChain version; set pin
-- [ ] Update optional-dependencies in `pyproject.toml`
-- [ ] *(Testing)* Isolation check still passes on bare install
+- [x] Research current stable LangChain version; set pin
+- [x] Update optional-dependencies in `pyproject.toml`
+- [x] *(Testing)* Isolation check still passes on bare install
 
 ### Task 5.2 — Bridge module
 **Type:** Core  
@@ -581,10 +581,10 @@ Optional, duck-typed LangChain bridge probed **before** plain-Python fallback; l
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement `can_wrap(obj) -> bool`
-- [ ] Implement `adapt(obj) -> Agent` with lazy langchain import
-- [ ] Default types `str → str` unless overridden
-- [ ] Module must not pollute `core/` with langchain imports
+- [x] Implement `can_wrap(obj) -> bool`
+- [x] Implement `adapt(obj) -> Agent` with lazy langchain import
+- [x] Default types `str → str` unless overridden
+- [x] Module must not pollute `core/` with langchain imports
 
 ### Task 5.3 — Wire into `wrap()`
 **Type:** Core  
@@ -595,9 +595,9 @@ Optional, duck-typed LangChain bridge probed **before** plain-Python fallback; l
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Probe LangChain bridge first when available
-- [ ] Fall back to plain-Python wrap
-- [ ] Leave placeholder comment for CrewAI slot (Phase 6)
+- [x] Probe LangChain bridge first when available
+- [x] Fall back to plain-Python wrap
+- [x] Leave placeholder comment for CrewAI slot (Phase 6)
 
 ### Task 5.4 — LangChain bridge tests
 **Type:** Testing  
@@ -607,10 +607,10 @@ Optional, duck-typed LangChain bridge probed **before** plain-Python fallback; l
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Gate file with `pytest.importorskip("langchain")`
-- [ ] Test adapt/delegate behavior with a minimal fake or light LC object
-- [ ] Regression: object matching LC duck-types is not wrapped as bare callable
-- [ ] CI bridge job runs this file
+- [x] Gate file with `pytest.importorskip("langchain")`
+- [x] Test adapt/delegate behavior with a minimal fake or light LC object
+- [x] Regression: object matching LC duck-types is not wrapped as bare callable
+- [x] CI bridge job runs this file
 
 ### Task 5.5 — Phase 5 documentation
 **Type:** Documentation  
@@ -619,14 +619,14 @@ Optional, duck-typed LangChain bridge probed **before** plain-Python fallback; l
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md`
-- [ ] Confirm README install extras still accurate (edit if pins/docs disagree)
+- [x] Update `CHANGELOG.md`
+- [x] Confirm README install extras still accurate (edit if pins/docs disagree)
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing (core + langchain when installed)
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing (core + langchain when installed)
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 
