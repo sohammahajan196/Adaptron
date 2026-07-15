@@ -29,8 +29,44 @@ dev = [
     "pytest>=8.0,<10",
     "ruff>=0.8,<1",
     "mypy>=1.11,<3",
+    "pre-commit>=3.5,<5",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["adaptron*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+src = ["adaptron", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+show_error_codes = true
+packages = ["adaptron"]
+# Bridge modules are duck-typed against optional third-party APIs; targeted
+# overrides / ignores land with Phases 5–6 (PLAN.md §5).
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = ["-ra"]

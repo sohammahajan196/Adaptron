@@ -89,11 +89,11 @@ Create an installable, lintable, CI-ready empty package so later phases have a r
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Create `adaptron/__init__.py` (empty public API for now; version optional)
-- [ ] Create `adaptron/core/__init__.py`
-- [ ] Create `adaptron/bridges/__init__.py`
-- [ ] Create `tests/__init__.py`
-- [ ] *(Testing)* Smoke: `python -c "import adaptron"` in a clean venv after `pip install -e .`
+- [x] Create `adaptron/__init__.py` (empty public API for now; version optional)
+- [x] Create `adaptron/core/__init__.py`
+- [x] Create `adaptron/bridges/__init__.py`
+- [x] Create `tests/__init__.py`
+- [x] *(Testing)* Smoke: `python -c "import adaptron"` in a clean venv after `pip install -e .`
 
 ### Task 0.3 — Tooling configuration
 **Type:** Core  
@@ -105,12 +105,12 @@ Create an installable, lintable, CI-ready empty package so later phases have a r
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Add `[tool.ruff]` / format settings to `pyproject.toml`
-- [ ] Add `[tool.mypy]` (strict enough for core; document bridge looseness later)
-- [ ] Add `[tool.pytest.ini_options]` basics (`testpaths = ["tests"]`)
-- [ ] Create `.pre-commit-config.yaml` running `ruff check`, `ruff format --check`, `mypy`
-- [ ] *(Testing)* Run ruff and mypy locally on the empty package
-- [ ] *(Documentation)* Ensure `CONTRIBUTING.md` commands still match (edit only if paths/commands differ)
+- [x] Add `[tool.ruff]` / format settings to `pyproject.toml`
+- [x] Add `[tool.mypy]` (strict enough for core; document bridge looseness later)
+- [x] Add `[tool.pytest.ini_options]` basics (`testpaths = ["tests"]`)
+- [x] Create `.pre-commit-config.yaml` running `ruff check`, `ruff format --check`, `mypy`
+- [x] *(Testing)* Run ruff and mypy locally on the empty package
+- [x] *(Documentation)* Ensure `CONTRIBUTING.md` commands still match (edit only if paths/commands differ)
 
 ### Task 0.4 — CI workflow
 **Type:** Core + Testing  
@@ -122,11 +122,11 @@ Create an installable, lintable, CI-ready empty package so later phases have a r
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Create `.github/workflows/ci.yml` with core-tests job (no extras)
-- [ ] Add bridge-tests job that installs `[langchain,crewai]` (suite may be empty until Phase 5–6)
-- [ ] Add dependency-isolation job verifying extras are not present on bare install
-- [ ] *(Testing)* Push/PR or `act`/manual dispatch and confirm jobs start (green on empty tree)
-- [ ] *(Documentation)* Link CI status expectations from `CONTRIBUTING.md` if missing
+- [x] Create `.github/workflows/ci.yml` with core-tests job (no extras)
+- [x] Add bridge-tests job that installs `[langchain,crewai]` (suite may be empty until Phase 5–6)
+- [x] Add dependency-isolation job verifying extras are not present on bare install
+- [x] *(Testing)* Push/PR or `act`/manual dispatch and confirm jobs start (green on empty tree)
+- [x] *(Documentation)* Link CI status expectations from `CONTRIBUTING.md` if missing
 
 ### Task 0.5 — Phase 0 close-out
 **Type:** Documentation + Testing  
@@ -140,14 +140,14 @@ Create an installable, lintable, CI-ready empty package so later phases have a r
 #### Subtasks
 - [x] Cursor rules under `.cursor/rules/*.mdc` present (do not regenerate wholesale)
 - [x] `CONTRIBUTING.md` present
-- [ ] *(Documentation)* Note scaffolding under `[Unreleased]` in `CHANGELOG.md`
-- [ ] *(Testing)* Final local: install, import, ruff, mypy, pytest (0 tests OK)
+- [x] *(Documentation)* Note scaffolding under `[Unreleased]` in `CHANGELOG.md`
+- [x] *(Testing)* Final local: install, import, ruff, mypy, pytest (0 tests OK)
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests / lint / type-check passing (empty suite OK)
-- [ ] Documentation updated (`CHANGELOG`, CONTRIBUTING aligned)
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests / lint / type-check passing (empty suite OK)
+- [x] Documentation updated (`CHANGELOG`, CONTRIBUTING aligned)
+- [x] Ready for next phase
 
 ---
 
@@ -181,10 +181,10 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Implement `AdaptronError(Exception)`
-- [ ] Implement `WrapError(AdaptronError)` with actionable message contract in docstring
-- [ ] *(Testing)* Minimal smoke import in a throwaway assert or defer to Task 1.4
-- [ ] *(Documentation)* Docstrings only (no README change yet)
+- [x] Implement `AdaptronError(Exception)`
+- [x] Implement `WrapError(AdaptronError)` with actionable message contract in docstring
+- [x] *(Testing)* Minimal smoke import in a throwaway assert or defer to Task 1.4
+- [x] *(Documentation)* Docstrings only (no README change yet)
 
 ### Task 1.2 — Agent class + type inference
 **Type:** Core  
@@ -196,11 +196,11 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement `Agent` storing callable + types + name
-- [ ] Implement type resolution helper (`inspect.signature` + `get_type_hints`)
-- [ ] Support explicit type overrides for input/output
-- [ ] Fall back to `typing.Any` when hints missing
-- [ ] Google-style docstring on `Agent`
+- [x] Implement `Agent` storing callable + types + name
+- [x] Implement type resolution helper (`inspect.signature` + `get_type_hints`)
+- [x] Support explicit type overrides for input/output
+- [x] Fall back to `typing.Any` when hints missing
+- [x] Google-style docstring on `Agent`
 - [ ] *(Testing)* Covered in Task 1.4
 
 ### Task 1.3 — Plain-Python `wrap()`

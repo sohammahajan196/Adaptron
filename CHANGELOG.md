@@ -9,4 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Project packaging metadata (`pyproject.toml`), MIT license, and `.gitignore`.
+- Phase 0 scaffolding: package identity (`pyproject.toml`, MIT `LICENSE`, `.gitignore`),
+  empty importable `adaptron` / `adaptron.core` / `adaptron.bridges` namespaces,
+  Ruff / mypy / pytest tooling, pre-commit hooks, and GitHub Actions CI
+  (core checks, bridge job stub, dependency-isolation check).
+- `CHANGELOG.md` and contributor workflow docs (`CONTRIBUTING.md`).

@@ -23,7 +23,13 @@ ruff format --check .
 mypy adaptron/core
 ```
 
-All four should pass before opening a pull request — they mirror the CI jobs in `.github/workflows/ci.yml`.
+All four should pass before opening a pull request — they mirror the checks in
+[`.github/workflows/ci.yml`](./.github/workflows/ci.yml). That workflow runs on
+every pull request (and on `main`/`master` pushes) with three jobs:
+
+1. **Core tests** — bare package + `pytest` / `ruff` / `mypy` (matrix: Python 3.10–3.12)
+2. **Bridge tests** — installs `adaptron[langchain,crewai]` and runs `tests/test_bridges_*.py` (empty until Phases 5–6)
+3. **Dependency isolation** — bare install must leave `langchain` and `crewai` importable-absent
 
 ## Workflow
 
