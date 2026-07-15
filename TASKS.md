@@ -71,13 +71,13 @@ Create an installable, lintable, CI-ready empty package so later phases have a r
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Create `pyproject.toml`: name `adaptron`, `requires-python >= 3.10`, **zero** required dependencies
-- [ ] Stub `[project.optional-dependencies]` for `langchain` and `crewai` (pins filled/refined in Phases 5–6)
-- [ ] Add `dev` optional extra stub for `pytest`, `ruff`, `mypy` (versions chosen at scaffolding time)
-- [ ] Add `.gitignore` with the paths above
-- [ ] Add `LICENSE` (MIT — `PRD.md` §7)
-- [ ] Create `CHANGELOG.md` with an `[Unreleased]` section
-- [ ] *(Documentation)* No README rewrite required beyond confirming install instructions still match
+- [x] Create `pyproject.toml`: name `adaptron`, `requires-python >= 3.10`, **zero** required dependencies
+- [x] Stub `[project.optional-dependencies]` for `langchain` and `crewai` (pins filled/refined in Phases 5–6)
+- [x] Add `dev` optional extra stub for `pytest`, `ruff`, `mypy` (versions chosen at scaffolding time)
+- [x] Add `.gitignore` with the paths above
+- [x] Add `LICENSE` (MIT — `PRD.md` §7)
+- [x] Create `CHANGELOG.md` with an `[Unreleased]` section
+- [x] *(Documentation)* No README rewrite required beyond confirming install instructions still match
 
 ### Task 0.2 — Package skeleton
 **Type:** Core  
