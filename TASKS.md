@@ -245,14 +245,14 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md` under `[Unreleased]`
-- [ ] Tick this phase’s boxes in `TASKS.md`
+- [x] Update `CHANGELOG.md` under `[Unreleased]`
+- [x] Tick this phase’s boxes in `TASKS.md`
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing (`test_agent.py`)
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing (`test_agent.py`)
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 

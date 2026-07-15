@@ -2,7 +2,10 @@
 
 **Connect AI agents from different frameworks into one pipeline — without writing glue code.**
 
-> **Project status:** pre-implementation. This README describes the target v1 API as specified in [PRD.md](./PRD.md) and [PLAN.md](./PLAN.md); no code has been written yet. Track progress in [TASKS.md](./TASKS.md).
+> **Project status:** Phase 1 complete — `wrap` and `Agent` work for plain-Python
+> callables. Pipelines, adapters, and framework bridges are not shipped yet.
+> Track progress in [TASKS.md](./TASKS.md); full v1 target API is in
+> [PRD.md](./PRD.md) / [PLAN.md](./PLAN.md).
 
 ---
 

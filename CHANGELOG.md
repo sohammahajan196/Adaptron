@@ -14,3 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Ruff / mypy / pytest tooling, pre-commit hooks, and GitHub Actions CI
   (core checks, bridge job stub, dependency-isolation check).
 - `CHANGELOG.md` and contributor workflow docs (`CONTRIBUTING.md`).
+- Phase 1 core agent/port abstraction: `AdaptronError` / `WrapError`,
+  `Agent` with type inference (explicit → hints → `Any`), and plain-Python
+  `wrap()` for functions and `__call__` instances (no framework bridges yet).
+  Public exports: `wrap`, `Agent`.
