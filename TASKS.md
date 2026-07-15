@@ -201,7 +201,7 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 - [x] Support explicit type overrides for input/output
 - [x] Fall back to `typing.Any` when hints missing
 - [x] Google-style docstring on `Agent`
-- [ ] *(Testing)* Covered in Task 1.4
+- [x] *(Testing)* Covered in Task 1.4
 
 ### Task 1.3 — Plain-Python `wrap()`
 **Type:** Core  
@@ -213,11 +213,11 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement `wrap(obj, *, input_type=..., output_type=..., name=...)` as designed
-- [ ] Detect functions and callable instances; reject unusable objects with `WrapError`
-- [ ] Export `wrap`, `Agent` from `adaptron/__init__.py`
-- [ ] Do **not** probe LangChain/CrewAI yet
-- [ ] *(Documentation)* Module docstring stating bridges come later
+- [x] Implement `wrap(obj, *, input_type=..., output_type=..., name=...)` as designed
+- [x] Detect functions and callable instances; reject unusable objects with `WrapError`
+- [x] Export `wrap`, `Agent` from `adaptron/__init__.py`
+- [x] Do **not** probe LangChain/CrewAI yet
+- [x] *(Documentation)* Module docstring stating bridges come later
 
 ### Task 1.4 — Agent / wrap tests
 **Type:** Testing  
@@ -229,12 +229,12 @@ Introduce `Agent`, type inference, `WrapError`, and plain-Python `wrap()` — no
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Test typed function inference
-- [ ] Test untyped function → `Any`
-- [ ] Test class with `__call__`
-- [ ] Test `WrapError` on non-wrappable object (message actionable)
-- [ ] Test explicit type override wins over hints
-- [ ] Run `pytest tests/test_agent.py`
+- [x] Test typed function inference
+- [x] Test untyped function → `Any`
+- [x] Test class with `__call__`
+- [x] Test `WrapError` on non-wrappable object (message actionable)
+- [x] Test explicit type override wins over hints
+- [x] Run `pytest tests/test_agent.py`
 
 ### Task 1.5 — Phase 1 documentation
 **Type:** Documentation  
