@@ -22,12 +22,12 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-# Bridge pins: revisit deliberately when bumping (PLAN.md §6). LangChain
-# current stable line is 1.3.x (verified against PyPI at Phase 5 Task 5.1);
-# pin major+minor tightly so upstream API drift is intentional, not silent.
+# Bridge pins: revisit deliberately when bumping (PLAN.md §6). Pin
+# major+minor tightly so upstream API drift is intentional, not silent.
+# LangChain: 1.3.x (verified against PyPI at Phase 5 Task 5.1).
 langchain = ["langchain>=1.3,<1.4"]
-# CrewAI pin remains a Phase 0 stub until Phase 6 confirms its stable range.
-crewai = ["crewai>=1.0,<2"]
+# CrewAI: 1.15.x (verified against PyPI at Phase 6 Task 6.1; latest 1.15.2).
+crewai = ["crewai>=1.15,<1.16"]
 dev = [
     "pytest>=8.0,<10",
     "ruff>=0.8,<1",

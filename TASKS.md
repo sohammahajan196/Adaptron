@@ -659,8 +659,8 @@ Same bridge pattern for CrewAI; probe **after** LangChain and **before** plain-P
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Confirm current stable CrewAI range; pin in `pyproject.toml`
-- [ ] *(Testing)* Bare install isolation job still green
+- [x] Confirm current stable CrewAI range; pin in `pyproject.toml`
+- [x] *(Testing)* Bare install isolation job still green
 
 ### Task 6.2 — Bridge module
 **Type:** Core  
