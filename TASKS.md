@@ -670,9 +670,9 @@ Same bridge pattern for CrewAI; probe **after** LangChain and **before** plain-P
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Implement duck-typed `can_wrap`
-- [ ] Implement `adapt` → `Agent`
-- [ ] Fail loudly with `WrapError` on unsupported shapes
+- [x] Implement duck-typed `can_wrap`
+- [x] Implement `adapt` → `Agent`
+- [x] Fail loudly with `WrapError` on unsupported shapes
 
 ### Task 6.3 — Wire into `wrap()`
 **Type:** Core  
@@ -682,9 +682,9 @@ Same bridge pattern for CrewAI; probe **after** LangChain and **before** plain-P
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Insert CrewAI probe after LangChain
-- [ ] Keep plain-Python last
-- [ ] *(Testing)* Covered in Task 6.4
+- [x] Insert CrewAI probe after LangChain
+- [x] Keep plain-Python last
+- [x] *(Testing)* Covered in Task 6.4
 
 ### Task 6.4 — CrewAI bridge tests
 **Type:** Testing  
@@ -694,10 +694,10 @@ Same bridge pattern for CrewAI; probe **after** LangChain and **before** plain-P
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Gate with `pytest.importorskip("crewai")`
-- [ ] Adapt/delegate test with minimal stub or light CrewAI object
-- [ ] Regression vs plain-Python fallback
-- [ ] CI bridge job includes this file
+- [x] Gate with `pytest.importorskip("crewai")`
+- [x] Adapt/delegate test with minimal stub or light CrewAI object
+- [x] Regression vs plain-Python fallback
+- [x] CI bridge job includes this file
 
 ### Task 6.5 — Phase 6 documentation
 **Type:** Documentation  

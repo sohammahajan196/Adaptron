@@ -2,8 +2,8 @@
 
 Public API only (STRUCTURE.md): ``wrap``, ``register_adapter``, ``Pipeline``,
 ``Agent``. ``wrap()`` probes bridges before the plain-Python catch-all, most
-specific first (PLAN.md §2.4): LangChain → (CrewAI, Phase 6) → plain-Python.
-A bridge is skipped entirely if its framework isn't installed, so core never
+specific first (PLAN.md §2.4): LangChain → CrewAI → plain-Python. A bridge
+is skipped entirely if its framework isn't installed, so core never
 hard-depends on it. Registered adapters are not yet consulted during
 ``Pipeline`` construction — that wiring lands in Task 3.3.
 """
@@ -55,9 +55,28 @@ def _try_langchain_bridge(
 
     if not langchain_bridge.can_wrap(obj):
         return None
-    return langchain_bridge.adapt(
-        obj, **_bridge_kwargs(input_type, output_type, name)
-    )
+    return langchain_bridge.adapt(obj, **_bridge_kwargs(input_type, output_type, name))
+
+
+def _try_crewai_bridge(
+    obj: Any, *, input_type: Any, output_type: Any, name: str
+) -> Agent | None:
+    """Probe the CrewAI bridge; ``None`` if unavailable or not a match.
+
+    Skipped entirely (returns ``None``, no error) when ``crewai`` isn't
+    installed — this is what keeps it optional (PLAN.md §2.4). Probed
+    after LangChain and before the plain-Python catch-all.
+    """
+    try:
+        import crewai  # type: ignore[import-not-found]  # noqa: F401
+    except ImportError:
+        return None
+
+    from adaptron.bridges import crewai_bridge
+
+    if not crewai_bridge.can_wrap(obj):
+        return None
+    return crewai_bridge.adapt(obj, **_bridge_kwargs(input_type, output_type, name))
 
 
 def wrap(
@@ -67,12 +86,12 @@ def wrap(
     output_type: Any = None,
     name: str = "",
 ) -> Agent:
-    """Wrap an agent — LangChain, (CrewAI, Phase 6), or plain Python — as an ``Agent``.
+    """Wrap an agent — LangChain, CrewAI, or plain Python — as an ``Agent``.
 
     Probe order (most specific first, PLAN.md §2.4): LangChain bridge, then
-    the CrewAI bridge slot (Phase 6), then the plain-Python catch-all
-    (functions and callable instances). Each bridge is skipped, not an
-    error, when its framework isn't installed.
+    the CrewAI bridge, then the plain-Python catch-all (functions and
+    callable instances). Each bridge is skipped, not an error, when its
+    framework isn't installed.
 
     Args:
         obj: The object to wrap.
@@ -98,8 +117,11 @@ def wrap(
     if langchain_agent is not None:
         return langchain_agent
 
-    # CrewAI bridge slot (Phase 6): probed here, between LangChain and the
-    # plain-Python fallback below (PLAN.md §2.4 probe order).
+    crewai_agent = _try_crewai_bridge(
+        obj, input_type=input_type, output_type=output_type, name=name
+    )
+    if crewai_agent is not None:
+        return crewai_agent
 
     if inspect.isclass(obj):
         raise WrapError(
