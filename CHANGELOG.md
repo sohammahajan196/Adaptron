@@ -38,7 +38,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stage (name, in/out types, input/output previews) in execution order.
 - Phase 5 LangChain bridge (optional extra `adaptron[langchain]`, pinned
   `langchain>=1.3,<1.4`): duck-typed `can_wrap`/`adapt` for Runnable and
-  legacy Chain shapes; `wrap()` probes LangChain before the plain-Python
-  catch-all (and before CrewAI, Phase 6); defaults bridged types to
-  `str → str`. Bridge is skipped when the extra is not installed. Gated
-  tests in `tests/test_bridges_langchain.py`.
+  legacy Chain shapes; `wrap()` probes LangChain before CrewAI and the
+  plain-Python catch-all; defaults bridged types to `str → str`. Bridge
+  is skipped when the extra is not installed. Gated tests in
+  `tests/test_bridges_langchain.py`.
+- Phase 6 CrewAI bridge (optional extra `adaptron[crewai]`, pinned
+  `crewai>=1.15,<1.16`): duck-typed `can_wrap`/`adapt` for Agent
+  (`role`/`goal`/`kickoff`) and Crew (`agents`/`tasks`/`kickoff`) shapes;
+  `wrap()` probe order is LangChain → CrewAI → plain-Python; defaults
+  bridged types to `str → str` (Crew non-dict inputs become
+  `{"input": value}`; framework outputs unwrap `.raw` when present).
+  Bridge is skipped when the extra is not installed. Gated tests in
+  `tests/test_bridges_crewai.py`. Install both bridges with
+  `adaptron[langchain,crewai]`.
