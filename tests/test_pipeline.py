@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 from adaptron import Pipeline, wrap
-from adaptron.core.errors import PipelineExecutionError
+from adaptron.core.errors import AdaptronError, PipelineExecutionError
 
 
 def _to_str(n: int) -> str:
@@ -73,7 +73,7 @@ def test_mid_pipeline_failure_raises_pipeline_execution_error() -> None:
 
 
 def test_pipeline_requires_at_least_one_stage() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(AdaptronError, match="at least one stage"):
         Pipeline([])
 
 

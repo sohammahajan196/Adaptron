@@ -744,9 +744,9 @@ Consistency pass over all exceptions — not new product features. Adapter conve
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Inventory all `raise` sites under `adaptron/`
-- [ ] Fix any message that is not actionable standalone
-- [ ] Ensure adapter fn exceptions become `AdaptronError` subclass (e.g. extend `PipelineExecutionError` or dedicated conversion error under existing hierarchy — do not invent parallel trees)
+- [x] Inventory all `raise` sites under `adaptron/`
+- [x] Fix any message that is not actionable standalone
+- [x] Ensure adapter fn exceptions become `AdaptronError` subclass (e.g. extend `PipelineExecutionError` or dedicated conversion error under existing hierarchy — do not invent parallel trees)
 
 ### Task 7.2 — Adapter failure wrapping
 **Type:** Core  
@@ -757,9 +757,9 @@ Consistency pass over all exceptions — not new product features. Adapter conve
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Catch adapter callable exceptions during `run()`
-- [ ] Re-raise as project error with stage/types/input
-- [ ] Do not continue pipeline after adapter failure
+- [x] Catch adapter callable exceptions during `run()`
+- [x] Re-raise as project error with stage/types/input
+- [x] Do not continue pipeline after adapter failure
 
 ### Task 7.3 — Error message tests
 **Type:** Testing  

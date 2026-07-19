@@ -1,4 +1,16 @@
-"""Adaptron exception hierarchy (grows with milestones — PLAN.md §3)."""
+"""Adaptron exception hierarchy (grows with milestones — PLAN.md §3).
+
+Raise-site inventory (Phase 7 audit, PRD §6.6 / §7 Debuggability):
+
+- ``adaptron/__init__.py`` — ``WrapError`` (class / non-callable).
+- ``adaptron/bridges/*`` — ``WrapError`` (missing extra / unsupported shape /
+  async kickoff).
+- ``adaptron/core/agent.py`` — ``WrapError`` (non-callable ``Agent.func``).
+- ``adaptron/core/pipeline.py`` — ``AdaptronError`` (empty pipeline),
+  ``NoAdapterError`` (construction mismatch), ``PipelineExecutionError``
+  (agent **or** inserted adapter failure during ``run()``).
+- ``adaptron/core/errors.py`` — constructors only; messages are the contract.
+"""
 
 from __future__ import annotations
 
@@ -44,56 +56,6 @@ class WrapError(AdaptronError):
     """
 
 
-class PipelineExecutionError(AdaptronError):
-    """Raised when a stage fails during ``Pipeline.run()``.
-
-    Raised (Milestone 2 / Phase 2) when any stage raises while the pipeline
-    is executing: execution halts and this error carries which stage failed
-    and the input that stage received (PRD §6.6, PLAN.md §3 Milestone 2).
-    Prefer ``raise PipelineExecutionError(...) from cause`` so the original
-    exception is preserved as ``__cause__``.
-
-    Attributes:
-        stage_name: Name of the stage that raised.
-        stage_input: Value passed into that stage (full object; the message
-            uses a truncated preview).
-
-    Message contract (actionable, PRD §7 Debuggability):
-
-    - Name **which** stage failed.
-    - Show a **preview** of the input it received.
-    - Tell the caller **how** to investigate (fix the stage or upstream).
-
-    Example::
-
-        raise PipelineExecutionError(
-            stage.name,
-            value,
-        ) from exc
-    """
-
-    stage_name: str
-    stage_input: Any
-
-    def __init__(
-        self,
-        stage_name: str,
-        stage_input: Any = None,
-        *,
-        message: str | None = None,
-    ) -> None:
-        self.stage_name = stage_name
-        self.stage_input = stage_input
-        if message is None:
-            preview = _input_preview(stage_input)
-            message = (
-                f"Pipeline stage {stage_name!r} failed while processing "
-                f"input {preview}. Inspect that stage's callable, or the "
-                "upstream output that produced this input."
-            )
-        super().__init__(message)
-
-
 def _type_name(tp: Any) -> str:
     """Return a short display name for a type used in error messages."""
     if tp is Any:
@@ -102,6 +64,82 @@ def _type_name(tp: Any) -> str:
     if isinstance(name, str):
         return name
     return repr(tp)
+
+
+class PipelineExecutionError(AdaptronError):
+    """Raised when a stage fails during ``Pipeline.run()``.
+
+    Raised (Milestone 2 / Phase 2) when any stage raises while the pipeline
+    is executing — including inserted adapter stages whose conversion
+    callable fails mid-``run()`` (PRD §6.6, PLAN.md §3 Milestone 7).
+    Execution always halts; bad converted data is never passed downstream.
+    Prefer ``raise PipelineExecutionError(...) from cause`` so the original
+    exception is preserved as ``__cause__``.
+
+    Attributes:
+        stage_name: Name of the agent or adapter stage that raised.
+        stage_input: Value passed into that stage (full object; the message
+            uses a truncated preview).
+        source_type: For adapter failures, the conversion source type; else
+            ``None``.
+        target_type: For adapter failures, the conversion target type; else
+            ``None``.
+
+    Message contract (actionable, PRD §7 Debuggability):
+
+    - Name **which** stage failed (agent name or ``adapter<Src->Tgt>``).
+    - For adapters, name **both** conversion types.
+    - Show a **preview** of the input it received.
+    - Tell the caller **how** to investigate (fix the stage/adapter or
+      upstream).
+
+    Example::
+
+        raise PipelineExecutionError(
+            stage.name,
+            value,
+            source_type=stage.input_type,
+            target_type=stage.output_type,
+        ) from exc
+    """
+
+    stage_name: str
+    stage_input: Any
+    source_type: Any
+    target_type: Any
+
+    def __init__(
+        self,
+        stage_name: str,
+        stage_input: Any = None,
+        *,
+        source_type: Any = None,
+        target_type: Any = None,
+        message: str | None = None,
+    ) -> None:
+        self.stage_name = stage_name
+        self.stage_input = stage_input
+        self.source_type = source_type
+        self.target_type = target_type
+        if message is None:
+            preview = _input_preview(stage_input)
+            if source_type is not None and target_type is not None:
+                src = _type_name(source_type)
+                tgt = _type_name(target_type)
+                message = (
+                    f"Adapter stage {stage_name!r} failed converting "
+                    f"{src} -> {tgt} with input {preview}. Fix the callable "
+                    f"passed to register_adapter({src}, {tgt}, fn), or the "
+                    "upstream output that produced this input."
+                )
+            else:
+                message = (
+                    f"Pipeline stage {stage_name!r} failed while processing "
+                    f"input {preview}. Inspect that stage's callable (or the "
+                    "registered adapter, if this is an adapter<Src->Tgt> "
+                    "stage), or the upstream output that produced this input."
+                )
+        super().__init__(message)
 
 
 class NoAdapterError(AdaptronError):

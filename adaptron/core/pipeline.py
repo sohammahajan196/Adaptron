@@ -13,7 +13,7 @@ from typing import Any, Union
 
 from adaptron.core.adapters import get_adapter
 from adaptron.core.agent import Agent
-from adaptron.core.errors import NoAdapterError, PipelineExecutionError
+from adaptron.core.errors import AdaptronError, NoAdapterError, PipelineExecutionError
 from adaptron.core.logging import log_stage
 
 PipelineStage = Union[Agent, "Pipeline"]
@@ -37,6 +37,11 @@ def _type_name(tp: Any) -> str:
         return "Any"
     name = getattr(tp, "__name__", None)
     return name if isinstance(name, str) else repr(tp)
+
+
+def _is_adapter_stage(stage: Agent) -> bool:
+    """Return ``True`` if ``stage`` was inserted by adapter resolution."""
+    return stage.name.startswith("adapter<")
 
 
 def _resolve_adjacent(left: Agent, right: Agent) -> list[Agent]:
@@ -104,7 +109,11 @@ class Pipeline:
 
     def __post_init__(self) -> None:
         if not self.stages:
-            raise ValueError("Pipeline requires at least one stage.")
+            raise AdaptronError(
+                "Pipeline requires at least one stage. Build one with "
+                "wrap(a) >> wrap(b), or pass a non-empty list of Agent stages "
+                "to Pipeline(...)."
+            )
         resolved: list[Agent] = [self.stages[0]]
         for left, right in zip(self.stages, self.stages[1:], strict=False):
             resolved.extend(_resolve_adjacent(left, right))
@@ -151,17 +160,27 @@ class Pipeline:
             The output of the last stage.
 
         Raises:
-            PipelineExecutionError: If a stage raises while processing its
-                input. Carries that stage's name and the input it received
-                (PRD §6.6); the original exception is preserved as
-                ``__cause__``.
+            PipelineExecutionError: If an agent or inserted adapter stage
+                raises while processing its input. Carries that stage's name
+                and the input it received (PRD §6.6); adapter failures also
+                include the conversion ``source_type``/``target_type``. The
+                original exception is preserved as ``__cause__``. Execution
+                always stops — bad data is never passed to later stages
+                (PLAN.md §3 Milestone 7).
         """
         for stage in self.stages:
             stage_input = value
             try:
                 value = stage(value)
             except Exception as exc:
-                raise PipelineExecutionError(stage.name, value) from exc
+                if _is_adapter_stage(stage):
+                    raise PipelineExecutionError(
+                        stage.name,
+                        stage_input,
+                        source_type=stage.input_type,
+                        target_type=stage.output_type,
+                    ) from exc
+                raise PipelineExecutionError(stage.name, stage_input) from exc
             if verbose:
                 log_stage(
                     stage.name,

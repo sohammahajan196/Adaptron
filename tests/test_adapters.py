@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 from adaptron import Pipeline, register_adapter, wrap
 from adaptron.core import adapters as adapters_module
-from adaptron.core.errors import NoAdapterError
+from adaptron.core.errors import NoAdapterError, PipelineExecutionError
 
 
 @pytest.fixture(autouse=True)
@@ -99,3 +99,36 @@ def test_any_skips_resolution() -> None:
     input_any_pipeline = wrap(produce_str) >> wrap(consume_str_as_any)
     assert isinstance(input_any_pipeline, Pipeline)
     assert len(input_any_pipeline.stages) == 2
+
+
+def test_adapter_mid_conversion_failure_wraps_and_halts() -> None:
+    """A raising adapter becomes ``PipelineExecutionError`` with types/input.
+
+    Downstream stages must not run (PRD §6.6 / Task 7.2).
+    """
+
+    def boom_adapter(text: str) -> dict[str, str]:
+        raise ValueError("malformed conversion")
+
+    downstream_calls: list[dict[str, str]] = []
+
+    def consume_dict(d: dict[str, str]) -> int:
+        downstream_calls.append(d)
+        return len(d["text"])
+
+    with pytest.warns(UserWarning, match="str -> dict"):
+        register_adapter(str, dict, boom_adapter)
+    pipeline = wrap(_produce_int) >> wrap(consume_dict, input_type=dict)
+
+    with pytest.raises(PipelineExecutionError) as exc_info:
+        pipeline.run(7)
+
+    error = exc_info.value
+    assert error.stage_name == "adapter<str->dict>"
+    assert error.stage_input == "7"
+    assert error.source_type is str
+    assert error.target_type is dict
+    assert "str -> dict" in str(error)
+    assert "register_adapter(str, dict, fn)" in str(error)
+    assert isinstance(error.__cause__, ValueError)
+    assert downstream_calls == []

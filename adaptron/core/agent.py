@@ -8,6 +8,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
+from adaptron.core.errors import WrapError
+
 if TYPE_CHECKING:
     from adaptron.core.pipeline import Pipeline, PipelineStage
 
@@ -92,8 +94,11 @@ class Agent:
 
     def __post_init__(self) -> None:
         if not callable(self.func):
-            raise TypeError(
-                f"Agent requires a callable, got {type(self.func).__name__!r}"
+            raise WrapError(
+                f"Cannot create Agent: expected a callable, got "
+                f"{type(self.func).__name__!r}. Pass a function or a class "
+                "instance implementing __call__, or use wrap() for framework "
+                "agents."
             )
 
         if self.input_type is None or self.output_type is None:
