@@ -769,9 +769,9 @@ Consistency pass over all exceptions — not new product features. Adapter conve
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Message tests for each exception type
-- [ ] Adapter mid-conversion failure test
-- [ ] Run full suite
+- [x] Message tests for each exception type
+- [x] Adapter mid-conversion failure test
+- [x] Run full suite
 
 ### Task 7.4 — Phase 7 documentation
 **Type:** Documentation  
@@ -780,14 +780,14 @@ Consistency pass over all exceptions — not new product features. Adapter conve
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Update `CHANGELOG.md`
-- [ ] Spot-check CONTRIBUTING error guidance
+- [x] Update `CHANGELOG.md`
+- [x] Spot-check CONTRIBUTING error guidance
 
 ## Phase Completion Checklist
-- [ ] All tasks completed
-- [ ] Tests passing
-- [ ] Documentation updated
-- [ ] Ready for next phase
+- [x] All tasks completed
+- [x] Tests passing
+- [x] Documentation updated
+- [x] Ready for next phase
 
 ---
 

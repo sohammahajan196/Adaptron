@@ -51,3 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Bridge is skipped when the extra is not installed. Gated tests in
   `tests/test_bridges_crewai.py`. Install both bridges with
   `adaptron[langchain,crewai]`.
+- Phase 7 error-handling polish: raise-site audit so messages stay actionable
+  without reading source; empty `Pipeline` / non-callable `Agent` raise
+  `AdaptronError` / `WrapError` (not bare stdlib exceptions); adapter
+  conversion failures during `run()` wrap as `PipelineExecutionError` with
+  stage name, input preview, and `source_type`/`target_type` (never pass
+  bad data downstream). Message-contract tests in `tests/test_errors.py`.

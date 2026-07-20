@@ -28,7 +28,7 @@ All four should pass before opening a pull request — they mirror the checks in
 every pull request (and on `main`/`master` pushes) with three jobs:
 
 1. **Core tests** — bare package + `pytest` / `ruff` / `mypy` (matrix: Python 3.10–3.12)
-2. **Bridge tests** — installs `adaptron[langchain,crewai]` and runs `tests/test_bridges_*.py` (empty until Phases 5–6)
+2. **Bridge tests** — installs `adaptron[langchain,crewai]` and runs `tests/test_bridges_*.py`
 3. **Dependency isolation** — bare install must leave `langchain` and `crewai` importable-absent
 
 ## Workflow
@@ -36,7 +36,14 @@ every pull request (and on `main`/`master` pushes) with three jobs:
 - **One phase per branch/PR.** Each phase in [TASKS.md](./TASKS.md) (aligned with [PLAN.md §3](./PLAN.md)) should land as its own pull request with its own tests, rather than being bundled with unrelated work. Large phases may also ship as one PR per Task X.Y.
 - **Tests are required, not optional.** A phase isn't done until its Phase Completion Checklist in `TASKS.md` is satisfied and its tests pass in CI.
 - **Core stays dependency-free.** Nothing under `adaptron/core/` may import `langchain`, `crewai`, or any other optional dependency, even conditionally. Framework-specific code belongs in `adaptron/bridges/` only (see [STRUCTURE.md](./STRUCTURE.md)).
-- **Errors must be actionable.** Any new exception should name the failing stage and the offending input/types, per the `Debuggability` requirement in [PRD.md §7](./PRD.md).
+- **Errors must be actionable.** Prefer the existing hierarchy — `WrapError`,
+  `NoAdapterError`, `PipelineExecutionError` (all under `AdaptronError`) —
+  rather than bare stdlib exceptions. Messages should name the failing
+  stage/adapter, the offending input (preview) and types when relevant, and
+  a concrete fix when one exists (e.g. the exact `register_adapter(...)`
+  call), per the `Debuggability` requirement in [PRD.md §7](./PRD.md).
+  Adapter callables that raise mid-`run()` must be wrapped as
+  `PipelineExecutionError` — never left as a raw opaque traceback alone.
 - **Update `CHANGELOG.md`** for any user-facing change, following [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## Reporting issues
