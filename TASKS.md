@@ -860,9 +860,9 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Verify every code sample against current API
-- [ ] Update status/roadmap checkboxes vs completed phases
-- [ ] Link examples directory
+- [x] Verify every code sample against current API
+- [x] Update status/roadmap checkboxes vs completed phases
+- [x] Link examples directory
 
 ### Task 8.5 — Demo asset + release notes
 **Type:** Documentation / Optional  
@@ -874,14 +874,14 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 
 #### Subtasks
 - [ ] *(Optional)* Record terminal GIF/video of flagship example
-- [ ] Finalize `CHANGELOG.md` for `0.1.0`
+- [x] Finalize `CHANGELOG.md` for `0.1.0`
 - [ ] *(Optional)* Tag `v0.1.0` when ready to release
 
 ## Phase Completion Checklist
-- [ ] All **required** tasks completed (8.5 GIF is Optional)
-- [ ] Tests passing
-- [ ] Documentation updated
-- [ ] Ready for Phase 9 (stretch) or pause at v0.1
+- [x] All **required** tasks completed (8.5 GIF is Optional)
+- [x] Tests passing
+- [x] Documentation updated
+- [x] Ready for Phase 9 (stretch) or pause at v0.1
 
 ---
 
