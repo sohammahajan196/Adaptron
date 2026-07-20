@@ -7,31 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- Phase 9 stretch: illustrative static playground under `docs/playground/`
-  (`index.html` + scripted `replay-data.json`). Replays the flagship
-  cross-framework mock stages (including auto `adapter<Message->str>`) with
-  diagram + log UI. **Not a live execution** — no Adaptron/LLM calls; see
-  banner copy and `docs/playground/README.md`. Linked from the README.
-- Illustrative README demo asset: `docs/demo-flagship.svg` (animated stage
-  diagram; not a live recording).
-- Post-v1 backlog (opt-in; defaults preserve v1 exact-pair / strict /
-  sync-linear behavior):
-  - `Pipeline(..., strict=False)` best-effort mode (warn + passthrough when
-    no adapter).
-  - `Pipeline(..., resolve_mro=True)` subclass / many-to-one base-adapter
-    lookup via `get_adapter(..., mro=True)`.
-  - `parallel(*agents)` fan-out helper (sync tuple of branch outputs).
-  - `Pipeline.arun()` for async stage callables; sync `run()` errors if a
-    stage returns an awaitable.
+Nothing yet — the next release will be documented here.
 
 ## [0.1.0] - 2026-07-20
 
 First public alpha of Adaptron: typed agent wrapping, linear pipelines with
-construction-time adapters, optional LangChain/CrewAI bridges, and runnable
-examples. Package version is `0.1.0` in `pyproject.toml`. Tag `v0.1.0` when
-you are ready to cut the GitHub release.
+construction-time adapters, optional LangChain/CrewAI bridges, runnable
+examples, post-v1 opt-in APIs, and an illustrative docs playground. Package
+version is `0.1.0` in `pyproject.toml`. **Suggested next step:** create and push
+git tag `v0.1.0` when you are ready to cut the GitHub release.
 
 ### Added
 
@@ -89,4 +73,20 @@ you are ready to cut the GitHub release.
   → CrewAI → plain formatter; `--mock` default / `--live` with
   `OPENAI_API_KEY`), e2e coverage in `tests/test_examples.py`, and a README
   aligned with the shipped public API (`wrap`, `Agent`, `Pipeline`,
-  `register_adapter`).
+  `register_adapter`, `parallel`).
+- Phase 9 stretch: illustrative static playground under `docs/playground/`
+  (`index.html` + scripted `replay-data.json`). Replays the flagship
+  cross-framework mock stages (including auto `adapter<Message->str>`) with
+  diagram + log UI. **Not a live execution** — no Adaptron/LLM calls; see
+  banner copy and `docs/playground/README.md`. Linked from the README.
+- Illustrative README demo asset: `docs/demo-flagship.svg` (animated stage
+  diagram; not a live recording).
+- Post-v1 backlog (opt-in; defaults preserve v1 exact-pair / strict /
+  sync-linear behavior):
+  - `Pipeline(..., strict=False)` best-effort mode (warn + passthrough when
+    no adapter).
+  - `Pipeline(..., resolve_mro=True)` subclass / many-to-one base-adapter
+    lookup via `get_adapter(..., mro=True)`.
+  - `parallel(*agents)` fan-out helper (sync tuple of branch outputs).
+  - `Pipeline.arun()` for async stage callables; sync `run()` errors if a
+    stage returns an awaitable.

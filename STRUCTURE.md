@@ -1,6 +1,6 @@
 # Project Folder Structure
 
-This document lays out the full repository layout implied by [PLAN.md](./PLAN.md) and [PRD.md](./PRD.md), with a short explanation of every folder and major file. It is the reference structure to scaffold when implementation starts (see [TASKS.md](./TASKS.md) Phase 0). For *how* the core modules work internally (data model, resolution algorithms, milestone details), see [PLAN.md §2-3](./PLAN.md) — this document only covers *what lives where and why it's organized that way*, to avoid repeating that content.
+This document lays out the full repository layout implied by [PLAN.md](./PLAN.md) and [PRD.md](./PRD.md), with a short explanation of every folder and major file. It is the reference map of the shipped **v0.1.0** repository (Phases 0–9 complete; see [TASKS.md](./TASKS.md)). For *how* the core modules work internally (data model, resolution algorithms, milestone details), see [PLAN.md §2-3](./PLAN.md) — this document only covers *what lives where and why it's organized that way*, to avoid repeating that content.
 
 ```
 adaptron/
@@ -50,7 +50,6 @@ adaptron/
 │   ├── demo-flagship.svg
 │   └── playground/
 └── tests/
-    ├── __init__.py
     ├── test_agent.py
     ├── test_pipeline.py
     ├── test_adapters.py

@@ -1,6 +1,6 @@
 # Product Requirements Document: Adaptron — Composable AI Agent Framework
 
-**Status:** Draft
+**Status:** Shipped (v0.1.0)
 **Version:** 1.0
 **Scope:** MVP (core library + one working cross-framework demo pipeline)
 **Related docs:** [PLAN.md](./PLAN.md) (architecture and milestones implementing this PRD) · [STRUCTURE.md](./STRUCTURE.md) (repo layout) · [TASKS.md](./TASKS.md) (phase-based implementation roadmap) · [README.md](./README.md) (project entry point)

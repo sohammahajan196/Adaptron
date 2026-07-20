@@ -2,13 +2,29 @@
 
 **Connect AI agents from different frameworks into one pipeline — without writing glue code.**
 
-> **Project status:** **v0.1.0** — Phases 0–8 complete. Public API: `wrap`,
-> `Agent`, `Pipeline`, `register_adapter`; optional LangChain/CrewAI bridges;
-> runnable demos under [`examples/`](./examples/). Stretch Phase 9 adds an
-> **illustrative-only** static playground under
-> [`docs/playground/`](./docs/playground/) (not a live run). See
-> [CHANGELOG.md](./CHANGELOG.md); design docs: [PRD.md](./PRD.md) /
-> [PLAN.md](./PLAN.md).
+![Illustrative flagship pipeline animation](./docs/demo-flagship.svg)
+
+*Illustrative diagram (not a live run). Interactive scripted replay:
+[`docs/playground/index.html`](./docs/playground/index.html).*
+
+## Features
+
+| Area | What's shipped |
+|---|---|
+| **Core pipeline** | `wrap()`, `Agent`, linear `Pipeline`, `>>` chaining with construction-time type checks |
+| **Auto-adaptation** | Adapter registry + automatic adapter insertion; default `str → dict` and demo `str → Message` |
+| **Framework bridges** | Optional LangChain and CrewAI bridges (`adaptron[langchain]`, `adaptron[crewai]`) |
+| **Best-effort mode** | `Pipeline(..., strict=False)` — warn and passthrough when no adapter (default still strict) |
+| **MRO-aware resolution** | `Pipeline(..., resolve_mro=True)` — subclass / base-class adapter lookup |
+| **Branching / parallel** | `parallel(a, b, ...)` fan-out helper → `tuple` of branch outputs |
+| **Async support** | `await pipeline.arun(...)` for async stages; sync `run()` rejects awaitables |
+| **Observability** | `verbose=True` stage logging (agents + inserted adapters) |
+| **Examples & docs** | Runnable scripts in [`examples/`](./examples/); illustrative playground in [`docs/playground/`](./docs/playground/) |
+
+**Status:** **v0.1.0** (2026-07-20) — Phases 0–9 complete, including post-v1 backlog
+and the stretch playground. Top-level exports: `wrap`, `Agent`, `Pipeline`,
+`register_adapter`, `parallel`. See [CHANGELOG.md](./CHANGELOG.md); design docs:
+[PRD.md](./PRD.md) / [PLAN.md](./PLAN.md).
 
 ---
 
@@ -42,18 +58,22 @@ Adaptron detects that the LangChain agent's output type doesn't match the CrewAI
 
 ## Installation
 
+Requires **Python 3.10+**.
+
 ```bash
-pip install adaptron              # core library, zero third-party dependencies
-pip install adaptron[langchain]   # + LangChain bridge (pinned langchain>=1.3,<1.4)
-pip install adaptron[crewai]      # + CrewAI bridge (pinned crewai>=1.15,<1.16)
-pip install adaptron[langchain,crewai]  # both
+pip install adaptron                        # core library, zero third-party dependencies
+pip install adaptron[langchain]             # + LangChain bridge (pinned langchain>=1.3,<1.4)
+pip install adaptron[crewai]                # + CrewAI bridge (pinned crewai>=1.15,<1.16)
+pip install adaptron[langchain,crewai]      # both bridges
+pip install adaptron[dev]                   # pytest, ruff, mypy, pre-commit (dev/CI tooling only)
+pip install adaptron[langchain,crewai,dev]    # bridges + dev tooling
 ```
 
 For local development from a clone:
 
 ```bash
-pip install -e ".[dev]"                 # core + pytest/ruff/mypy
-pip install -e ".[langchain,crewai,dev]"  # + both bridges
+pip install -e ".[dev]"                       # core + dev tooling
+pip install -e ".[langchain,crewai,dev]"    # + both bridges
 ```
 
 The core package never pulls in LangChain or CrewAI — framework support is strictly opt-in via extras. `wrap()` probes most-specific first: LangChain (if installed) → CrewAI (if installed) → plain-Python callable. Each bridge is skipped entirely when its extra isn't present.
@@ -87,8 +107,9 @@ pipeline.run("hello adaptron", verbose=True)
 # stage='word_count' in=dict out=dict input={'text': 'HELLO ADAPTRON'} output={'words': 2}
 ```
 
-Public API (also exported): `wrap`, `Agent`, `Pipeline`, `register_adapter`,
-`parallel` (post-v1 fan-out helper).
+Public API (`adaptron.__all__`): `wrap`, `Agent`, `Pipeline`, `register_adapter`,
+`parallel`. Pipeline methods `run()` and `arun()` are the sync/async execution
+entry points (not top-level exports).
 
 ## Examples
 
@@ -103,11 +124,6 @@ Runnable scripts live in [`examples/`](./examples/):
 python examples/plain_python_pipeline.py --verbose
 python examples/cross_framework_pipeline.py --verbose
 ```
-
-![Illustrative flagship pipeline animation](./docs/demo-flagship.svg)
-
-*Illustrative diagram (not a live run). Interactive scripted replay:
-[`docs/playground/index.html`](./docs/playground/index.html).*
 
 ## Illustrative playground (stretch)
 
@@ -147,7 +163,7 @@ Adaptron is built milestone-by-milestone (see [PLAN.md §3](./PLAN.md) / [TASKS.
 | 5 | LangChain bridge | Done |
 | 6 | CrewAI bridge | Done |
 | 7 | Error handling audit | Done |
-| 8 | Example pipelines + README | Done (`0.1.0`; optional README GIF / git tag left to the releaser) |
+| 8 | Example pipelines + README | Done (`0.1.0`) |
 | 9 | Interactive playground | Done (stretch — illustrative static replay only) |
 
 ## Documentation

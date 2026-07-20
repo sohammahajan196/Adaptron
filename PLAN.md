@@ -1,6 +1,6 @@
 # Adaptron — Technical Plan
 
-**Status:** Draft
+**Status:** Implemented (v0.1.0)
 **Related docs:** [PRD.md](./PRD.md) — product requirements this plan implements · [STRUCTURE.md](./STRUCTURE.md) — full repo layout and file-by-file rationale · [TASKS.md](./TASKS.md) — phase-based implementation roadmap
 
 ---
@@ -12,7 +12,7 @@ This is the shape of the package and its milestone-relevant files; see [STRUCTUR
 ```
 adaptron/
 ├── adaptron/                    # core package
-│   ├── __init__.py               # public API: wrap, register_adapter, Pipeline, Agent
+│   ├── __init__.py               # public API: wrap, register_adapter, Pipeline, Agent, parallel
 │   ├── core/
 │   │   ├── agent.py               # Agent class, port declaration/inference
 │   │   ├── pipeline.py            # Pipeline, >> operator, construction-time checks
@@ -264,13 +264,13 @@ a collection of passing tests locally:
   required dependencies, plus optional extras:
   ```toml
   [project.optional-dependencies]
-  langchain = ["langchain>=0.2,<0.3"]
-  crewai = ["crewai>=0.3,<0.4"]
+  langchain = ["langchain>=1.3,<1.4"]
+  crewai = ["crewai>=1.15,<1.16"]
+  dev = ["pytest>=8.0,<10", "ruff>=0.8,<1", "mypy>=1.11,<3", "pre-commit>=3.5,<5"]
   ```
-  These ranges are illustrative — confirm current stable major versions
-  for both frameworks at implementation time (Phase 0 / Phase 5–6) and pin
-  accordingly; the exact bounds matter less than the *policy* of
-  pinning tightly and revisiting deliberately.
+  Pins are set in `pyproject.toml` as of v0.1.0; revisit deliberately when
+  bumping supported ranges (policy: pin major+minor tightly so upstream API
+  drift is intentional, not silent).
 - Version pins on extras are intentional (see PRD §9 risk: bridges break
   silently on upstream API changes) and should be revisited when bumping
   supported ranges.
