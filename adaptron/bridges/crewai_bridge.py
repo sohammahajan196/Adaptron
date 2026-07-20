@@ -60,9 +60,11 @@ def _unwrap_output(result: Any) -> Any:
     if inspect.isawaitable(result):
         raise WrapError(
             "Cannot wrap CrewAI object: kickoff returned an awaitable, but "
-            "Adaptron v1 only supports synchronous run(). Use a sync CrewAI "
-            "Agent/Crew kickoff outside an async event loop, or await the "
-            "result yourself before handing values into an Adaptron pipeline."
+            "this bridge only calls kickoff synchronously. Use "
+            "await pipeline.arun(...) if the rest of your pipeline is async, "
+            "use a sync CrewAI Agent/Crew kickoff outside an async event "
+            "loop, or await the result yourself before handing values into "
+            "an Adaptron pipeline."
         )
     # LiteAgentOutput / CrewOutput expose `.raw`; prefer it so default
     # str→str ports see a plain value rather than the framework wrapper.
@@ -123,7 +125,8 @@ def adapt(
     Raises:
         WrapError: If the ``crewai`` package is not installed, ``obj`` is
             not a supported Agent/Crew shape, or ``kickoff`` returns an
-            awaitable (async is out of scope for v1).
+            awaitable (this bridge always calls it synchronously; use
+            ``pipeline.arun(...)`` if the surrounding pipeline is async).
     """
     try:
         import crewai  # type: ignore[import-not-found]  # noqa: F401

@@ -20,8 +20,20 @@ pytest                 # core tests (run with no extras installed to verify depe
 pytest --run-bridges   # if a marker/flag is added to opt into bridge tests explicitly
 ruff check .
 ruff format --check .
-mypy adaptron/core
+mypy adaptron/core      # run in a venv WITHOUT langchain/crewai installed — see note below
 ```
+
+**`mypy` must be run in a venv without the `langchain`/`crewai` extras
+installed**, even though `mypy adaptron/core` never imports either package.
+mypy statically follows every `import langchain` / `import crewai` it finds —
+including the lazy, `try`/`except`-guarded ones in `adaptron/__init__.py` and
+`adaptron/bridges/*.py` — regardless of whether that import is actually
+reachable at runtime. If those packages happen to be installed in the same
+environment, mypy resolves them for real and can fail on unrelated
+transitive-dependency stub issues that have nothing to do with Adaptron's own
+code. `[tool.mypy] packages` in `pyproject.toml` is scoped to `adaptron.core`
+for the same reason — the bridges are intentionally excluded from routine
+mypy runs (see `pyproject.toml`'s `[tool.mypy]` comment).
 
 All four should pass before opening a pull request — they mirror the checks in
 [`.github/workflows/ci.yml`](./.github/workflows/ci.yml). That workflow runs on

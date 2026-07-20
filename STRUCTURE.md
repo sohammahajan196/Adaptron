@@ -47,15 +47,19 @@ adaptron/
 │   ├── plain_python_pipeline.py
 │   └── cross_framework_pipeline.py
 ├── docs/
+│   ├── demo-flagship.svg
 │   └── playground/
 └── tests/
     ├── __init__.py
     ├── test_agent.py
     ├── test_pipeline.py
     ├── test_adapters.py
+    ├── test_logging.py
     ├── test_bridges_langchain.py
     ├── test_bridges_crewai.py
-    └── test_errors.py
+    ├── test_errors.py
+    ├── test_examples.py
+    └── test_post_v1.py
 ```
 
 ---
@@ -99,7 +103,9 @@ Persistent AI-agent guidance so implementation stays consistent with the archite
 
 ### `adaptron/__init__.py`
 
-Public API surface only: `wrap`, `register_adapter`, `Pipeline`, `Agent`. Kept deliberately small — anything not exported here isn't part of the supported interface.
+Public API surface only: `wrap`, `register_adapter`, `Pipeline`, `Agent`, plus
+the post-v1 branching helper `parallel` (`PLAN.md §7`). Kept deliberately
+small — anything not exported here isn't part of the supported interface.
 
 ### `adaptron/core/` — framework-agnostic pipeline engine
 
@@ -125,13 +131,16 @@ Exists as runnable scripts rather than just README snippets so the interoperabil
 - **`plain_python_pipeline.py`** — a minimal pipeline of wrapped plain-Python functions, no adapters required; the simplest possible "it works" example.
 - **`cross_framework_pipeline.py`** — the flagship demo: one real LangChain agent, one real CrewAI agent, and one plain Python formatter, connected with `>>`, with at least one genuine type mismatch auto-resolved. This is the file the README's before/after comparison is drawn from.
 
-## `docs/playground/`
+## `docs/`
 
-Reserved for the stretch-goal interactive demo (Milestone 9) — a simulated pipeline runner that replays the `cross_framework_pipeline.py` example visually (diagram + log output), explicitly labeled as illustrative rather than a live execution environment (`PRD.md §9` risk mitigation).
+- **`demo-flagship.svg`** — an illustrative (not a live recording) animated stage diagram of the flagship cross-framework pipeline, embedded in the README for at-a-glance demo clarity (`PRD.md §3.2`).
+- **`playground/`** — the stretch-goal interactive demo (Milestone 9): a simulated pipeline runner that replays the `cross_framework_pipeline.py` example visually (diagram + log output), explicitly labeled as illustrative rather than a live execution environment (`PRD.md §9` risk mitigation).
 
 ## `tests/` — automated test suite
 
-One file per core module (`agent`, `pipeline`, `adapters`, `errors`) plus one per bridge, so a failure immediately localizes to the responsible module, mirroring the `core/`/`bridges/` split:
+One file per core module (`agent`, `pipeline`, `adapters`, `logging`, `errors`) plus one per bridge, plus e2e/post-v1 coverage, so a failure immediately localizes to the responsible module, mirroring the `core/`/`bridges/` split:
 
-- **`test_agent.py`**, **`test_pipeline.py`**, **`test_adapters.py`**, **`test_errors.py`** — run with zero optional dependencies installed.
+- **`test_agent.py`**, **`test_pipeline.py`**, **`test_adapters.py`**, **`test_logging.py`**, **`test_errors.py`** — run with zero optional dependencies installed.
 - **`test_bridges_langchain.py`**, **`test_bridges_crewai.py`** — gated behind `pytest.importorskip(...)` so CI can run core tests without the extras, and bridge tests only when the relevant extra is installed (`PLAN.md §4`).
+- **`test_examples.py`** — e2e coverage for both `examples/` scripts (Milestone 8); the plain-Python example runs with zero optional dependencies, the cross-framework example's mock-mode assertions are gated behind `pytest.importorskip("langchain")`/`("crewai")`.
+- **`test_post_v1.py`** — coverage for the opt-in post-v1 backlog: best-effort mode, MRO adapter resolution, `parallel`, and `arun()` (`PLAN.md §7`).

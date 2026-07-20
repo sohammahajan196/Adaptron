@@ -65,9 +65,14 @@ python_version = "3.10"
 strict = true
 warn_unreachable = true
 show_error_codes = true
-packages = ["adaptron"]
-# Bridge modules are duck-typed against optional third-party APIs; targeted
-# overrides / ignores land with Phases 5–6 (PLAN.md §5).
+packages = ["adaptron.core"]
+# Scoped to adaptron.core only — matches CI and CONTRIBUTING.md exactly.
+# adaptron/bridges/ duck-types against optional third-party APIs; mypy
+# statically follows their lazy `import langchain` / `import crewai` calls
+# regardless of the try/except guards, so checking bridges requires the
+# extras installed too, and their transitive stubs (e.g. numpy) aren't
+# guaranteed compatible with this project's pinned python_version. Revisit
+# with a dedicated bridges+extras mypy job if that combination stabilizes.
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

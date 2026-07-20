@@ -275,16 +275,56 @@ a collection of passing tests locally:
   silently on upstream API changes) and should be revisited when bumping
   supported ranges.
 
-## 7. Deferred design decisions (mirrors PRD §12)
+## 7. Post-v1 decisions made (mirrors PRD §12)
 
-These are implementation-level questions tied to PRD §12's Future
-Considerations — only relevant if/when those post-v1 features are
-picked up, not blockers for v1:
+All five PRD §12 Future Considerations have shipped as **opt-in** post-v1
+APIs (`TASKS.md` Post-v1 Backlog). Defaults are unchanged from v1: exact-pair
+adapter lookup, strict construction-time failure, linear `>>` topology, and
+sync-only `run()`. This section records the decisions actually made, so a
+reader doesn't have to reverse-engineer them from the diff.
 
-- If best-effort mode is added, should it live as a `Pipeline(strict=False)`
-  flag, or a global config setting?
-- If many-to-one adapter coercion is added, does registry lookup need to
-  change from exact-pair matching to a resolution order (e.g.,
-  MRO-based), and how would ambiguous matches be reported?
-- If async agents are added, does `Pipeline` need a parallel `arun()`
-  method, or should `run()` detect and await coroutines transparently?
+- **Best-effort mode** — shipped as a per-`Pipeline` flag, not a global
+  config setting: `Pipeline(..., strict=False)`. When no adapter resolves
+  for an adjacent pair, it warns (`UserWarning`, message prefixed
+  `best-effort pipeline:`) and passes the value through unconverted instead
+  of raising `NoAdapterError`. `strict=True` remains the dataclass default,
+  so omitting the flag preserves v1 behavior exactly. The flag propagates
+  through `>>` chaining (`Agent.__rshift__`/`__rrshift__`,
+  `Pipeline.__rshift__`/`__rrshift__` all forward `strict`/`resolve_mro` from
+  whichever side already carries them).
+- **Subclass/MRO-aware adapter resolution** — shipped as
+  `Pipeline(..., resolve_mro=True)`, backed by `get_adapter(source, target,
+  mro=True)` in `adapters.py`. Resolution order: exact `(source_type,
+  target_type)` match always wins first, regardless of `mro`; only when no
+  exact pair exists does it walk `source_type.__mro__ ×
+  target_type.__mro__`, preferring the shallowest source-MRO depth, then
+  shallowest target-MRO depth (first hit in nested-loop order). Default
+  remains `resolve_mro=False` (exact-pair only, v1 behavior).
+- **Many-to-one adapter coercion** — no registry shape change was needed.
+  Because the registry key is the full `(source_type, target_type)` tuple,
+  registering `TypeA -> Target` and `TypeB -> Target` never collides —
+  each is a distinct key. The existing warn-on-overwrite path only fires
+  when the *same* `(source_type, target_type)` pair is registered twice, so
+  it correctly leaves legitimate many-to-one registrations alone. Combined
+  with MRO resolution above, one base-class adapter can also serve many
+  subclasses without per-subclass registration.
+- **Branching/parallel pipeline topology** — shipped as a standalone helper,
+  `parallel(*agents, name="parallel") -> Agent`, in `pipeline.py`, not a new
+  `Pipeline` topology or a multi-input/output port system. It fans one input
+  out to every branch (in order) and collects results into a `tuple`,
+  exposing itself as a normal `Agent` (`output_type=tuple`) so it composes
+  with `>>` like any other stage — e.g. `parallel(a, b) >> merge_fn`. Each
+  branch call is independent (no shared mutable state between branches);
+  execution is still synchronous/sequential per branch unless awaited via
+  `arun()`. `parallel` is exported from `adaptron/__init__.py` as a
+  documented post-v1 addition to the otherwise-small public API.
+- **Native async execution** — shipped as `Pipeline.arun()`, a separate
+  coroutine method alongside sync `run()`, not transparent coroutine
+  detection inside `run()`. `arun()` awaits any stage output that
+  `inspect.isawaitable()` flags; sync stages pass through unchanged. `run()`
+  deliberately does **not** silently await — if a stage returns an
+  awaitable, `run()` raises `AdaptronError` pointing the caller at
+  `arun()`, so mixing a sync pipeline with an async stage fails loudly
+  rather than returning a coroutine object as if it were a real result.
+  No new dependency was introduced — `arun()` uses stdlib `asyncio`/
+  `inspect.isawaitable` only (see `dependencies.mdc`).
