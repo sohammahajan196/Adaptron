@@ -1,0 +1,51 @@
+{
+  "topic": "adaptron interoperability",
+  "note": "Scripted replay of examples/cross_framework_pipeline.py --mock. Not a live run.",
+  "stages": [
+    {
+      "name": "langchain_researcher",
+      "kind": "agent",
+      "framework": "LangChain (mocked)",
+      "input_type": "str",
+      "output_type": "Message",
+      "input": "adaptron interoperability",
+      "output": "Message(text='[LC mock research] adaptron interoperability')",
+      "log": "stage='langchain_researcher' in=str out=Message input='adaptron interoperability' output=Message(text='[LC mock research] adaptron interoperability')"
+    },
+    {
+      "name": "adapter<Message->str>",
+      "kind": "adapter",
+      "framework": "Adaptron (auto-inserted)",
+      "input_type": "Message",
+      "output_type": "str",
+      "input": "Message(text='[LC mock research] adaptron interoperability')",
+      "output": "[LC mock research] adaptron interoperability",
+      "log": "stage='adapter<Message->str>' in=Message out=str input=Message(text='[LC mock research] adaptron interoperability') output='[LC mock research] adaptron interoperability'"
+    },
+    {
+      "name": "crewai_writer",
+      "kind": "agent",
+      "framework": "CrewAI (mocked)",
+      "input_type": "str",
+      "output_type": "str",
+      "input": "[LC mock research] adaptron interoperability",
+      "output": "[CrewAI mock draft] [LC mock research] adaptron interoperability",
+      "log": "stage='crewai_writer' in=str out=str input='[LC mock research] adaptron interoperability' output='[CrewAI mock draft] [LC mock research] adaptron interoperability'"
+    },
+    {
+      "name": "format_result",
+      "kind": "agent",
+      "framework": "plain Python",
+      "input_type": "str",
+      "output_type": "dict",
+      "input": "[CrewAI mock draft] [LC mock research] adaptron interoperability",
+      "output": "{'status': 'ok', 'draft': '[CrewAI mock draft] [LC mock research] adaptron interoperability', 'words': '8'}",
+      "log": "stage='format_result' in=str out=dict input='[CrewAI mock draft] [LC mock research] adaptron interoperability' output={'status': 'ok', 'draft': '[CrewAI mock draft] [LC mock research] adaptron interoperability', 'words': '8'}"
+    }
+  ],
+  "result": {
+    "status": "ok",
+    "draft": "[CrewAI mock draft] [LC mock research] adaptron interoperability",
+    "words": "8"
+  }
+}

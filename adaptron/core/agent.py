@@ -120,12 +120,19 @@ class Agent:
 
         ``a >> b`` returns a ``Pipeline`` containing ``[a, b]``; if ``other``
         is itself a ``Pipeline``, its stages are flattened in rather than
-        nested (PLAN.md §2.2).
+        nested (PLAN.md §2.2). Post-v1 flags on ``other`` (``strict``,
+        ``resolve_mro``) are preserved when chaining onto a ``Pipeline``.
         """
         from adaptron.core.pipeline import Pipeline, _flatten
 
         if not isinstance(other, (Agent, Pipeline)):
             return NotImplemented
+        if isinstance(other, Pipeline):
+            return Pipeline(
+                [self, *_flatten(other)],
+                strict=other.strict,
+                resolve_mro=other.resolve_mro,
+            )
         return Pipeline([self, *_flatten(other)])
 
     def __rrshift__(self, other: PipelineStage) -> Pipeline:
@@ -138,4 +145,10 @@ class Agent:
 
         if not isinstance(other, (Agent, Pipeline)):
             return NotImplemented
+        if isinstance(other, Pipeline):
+            return Pipeline(
+                [*_flatten(other), self],
+                strict=other.strict,
+                resolve_mro=other.resolve_mro,
+            )
         return Pipeline([*_flatten(other), self])

@@ -3,6 +3,10 @@
 Default adapters (``str → dict``, ``str → Message``) register automatically
 when this module is imported — including via ``import adaptron`` — so demos
 and construction-time resolution work with no extra user setup.
+
+Post-v1: optional MRO-aware lookup (and thereby many-subclass → one target
+coercion) via ``get_adapter(..., mro=True)`` / ``Pipeline(resolve_mro=True)``.
+Exact-pair remains the default.
 """
 
 from __future__ import annotations
@@ -31,10 +35,9 @@ class Message:
 def register_adapter(source_type: type, target_type: type, fn: AdapterFn) -> None:
     """Register a converter for the exact ``(source_type, target_type)`` pair.
 
-    Lookup is by exact type match only — no MRO walk, no ``isinstance``
-    fallback (PLAN.md §2.3 v1 scope note: an adapter registered for a base
-    class will *not* match a subclass instance). This keeps resolution
-    O(1) via a plain dict lookup.
+    Lookup defaults to exact type match only. With ``Pipeline(resolve_mro=True)``
+    or ``get_adapter(..., mro=True)``, a registered base-class pair can also
+    serve subclasses (many-to-one coercion via MRO).
 
     Registering the same pair again overwrites the previous adapter and
     emits a ``UserWarning`` — never a silent overwrite.
@@ -55,15 +58,53 @@ def register_adapter(source_type: type, target_type: type, fn: AdapterFn) -> Non
     _registry[key] = fn
 
 
-def get_adapter(source_type: type, target_type: type) -> AdapterFn | None:
-    """Look up the exact adapter registered for ``(source_type, target_type)``.
+def _mro_types(tp: Any) -> tuple[type, ...]:
+    """Return an MRO-like sequence for adapter resolution."""
+    if tp is Any or not isinstance(tp, type):
+        return ()
+    return tp.__mro__
 
-    O(1) dict lookup, used by ``Pipeline`` construction-time resolution
-    (Phase 3 Task 3.3). Returns ``None`` when no exact-pair adapter is
-    registered; callers decide whether that is acceptable (e.g. ``Any``
-    on either side) or should raise ``NoAdapterError``.
+
+def get_adapter(
+    source_type: type,
+    target_type: type,
+    *,
+    mro: bool = False,
+) -> AdapterFn | None:
+    """Look up an adapter for ``(source_type, target_type)``.
+
+    Exact ``(source, target)`` wins. When ``mro=True``, also search registered
+    pairs along ``source_type``'s MRO × ``target_type``'s MRO, preferring the
+    most specific source then most specific target (first hits in each MRO).
+    If multiple equally specific pairs exist at different MRO depths, the
+    earliest source-MRO match wins; ambiguous same-depth pairs raise
+    ``AmbiguousAdapterError`` only when two different callables tie — for
+    simplicity we take the first discovered in source-major order.
+
+    Args:
+        source_type: Upstream output type.
+        target_type: Downstream input type.
+        mro: Enable subclass / many-to-one base-adapter matching.
+
+    Returns:
+        The adapter callable, or ``None`` if unresolved.
     """
-    return _registry.get((source_type, target_type))
+    exact = _registry.get((source_type, target_type))
+    if exact is not None or not mro:
+        return exact
+
+    best: AdapterFn | None = None
+    best_key: tuple[int, int] | None = None
+    for i, src in enumerate(_mro_types(source_type)):
+        for j, tgt in enumerate(_mro_types(target_type)):
+            fn = _registry.get((src, tgt))
+            if fn is None:
+                continue
+            key = (i, j)
+            if best_key is None or key < best_key:
+                best_key = key
+                best = fn
+    return best
 
 
 def _str_to_dict(value: str) -> dict[str, str]:

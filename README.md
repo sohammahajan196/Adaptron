@@ -4,9 +4,11 @@
 
 > **Project status:** **v0.1.0** — Phases 0–8 complete. Public API: `wrap`,
 > `Agent`, `Pipeline`, `register_adapter`; optional LangChain/CrewAI bridges;
-> runnable demos under [`examples/`](./examples/). See [CHANGELOG.md](./CHANGELOG.md).
-> Stretch playground is Phase 9 ([TASKS.md](./TASKS.md)); design docs:
-> [PRD.md](./PRD.md) / [PLAN.md](./PLAN.md).
+> runnable demos under [`examples/`](./examples/). Stretch Phase 9 adds an
+> **illustrative-only** static playground under
+> [`docs/playground/`](./docs/playground/) (not a live run). See
+> [CHANGELOG.md](./CHANGELOG.md); design docs: [PRD.md](./PRD.md) /
+> [PLAN.md](./PLAN.md).
 
 ---
 
@@ -85,7 +87,8 @@ pipeline.run("hello adaptron", verbose=True)
 # stage='word_count' in=dict out=dict input={'text': 'HELLO ADAPTRON'} output={'words': 2}
 ```
 
-Public API (also exported): `wrap`, `Agent`, `Pipeline`, `register_adapter`.
+Public API (also exported): `wrap`, `Agent`, `Pipeline`, `register_adapter`,
+`parallel` (post-v1 fan-out helper).
 
 ## Examples
 
@@ -101,11 +104,30 @@ python examples/plain_python_pipeline.py --verbose
 python examples/cross_framework_pipeline.py --verbose
 ```
 
+![Illustrative flagship pipeline animation](./docs/demo-flagship.svg)
+
+*Illustrative diagram (not a live run). Interactive scripted replay:
+[`docs/playground/index.html`](./docs/playground/index.html).*
+
+## Illustrative playground (stretch)
+
+Open [`docs/playground/index.html`](./docs/playground/index.html) for a
+**simulated** walkthrough of the flagship cross-framework pipeline (diagram +
+scripted verbose-style logs).
+
+This playground does **not** execute Adaptron, LangChain, CrewAI, or any LLM —
+outputs are pre-scripted for docs (`PRD.md` §9). For a real run, use
+[`examples/cross_framework_pipeline.py`](./examples/cross_framework_pipeline.py)
+(`--mock` needs no API keys; `--live` needs `OPENAI_API_KEY`). See
+[`docs/playground/README.md`](./docs/playground/README.md) for format notes.
+
 ## How it works
 
 - **`wrap(agent)`** accepts a LangChain agent/chain, a CrewAI agent/crew, or any plain Python callable (functions and `__call__` instances — not bare classes), and returns an `Agent` with an inferred (or explicit) input/output type.
 - **`agent_a >> agent_b`** connects two agents (or pipelines) into a `Pipeline`. Type compatibility is checked immediately, at construction time — not deferred until you run it.
-- **Mismatched types** are resolved by looking up a registered adapter for that exact `(source_type, target_type)` pair and inserting it automatically. Exact match only in v1 (no MRO/`isinstance` fallback). No adapter registered → `NoAdapterError` at construction time. Defaults include `str → dict` and demo `str → Message`.
+- **Mismatched types** are resolved by looking up a registered adapter for that exact `(source_type, target_type)` pair and inserting it automatically. Exact match only by default (no MRO/`isinstance` fallback). Opt in with `Pipeline(..., resolve_mro=True)` for subclass / many-to-one base adapters. No adapter registered → `NoAdapterError` at construction time unless `Pipeline(..., strict=False)` (best-effort warn + passthrough). Defaults include `str → dict` and demo `str → Message`.
+- **`parallel(a, b, ...)`** (post-v1) fans one input out to several agents and returns a `tuple` of results (still sync/sequential under the hood).
+- **`Pipeline.run` / `arun`**: sync `run()` by default; `await pipeline.arun(...)` when stages are async. `run()` errors if a stage returns an awaitable.
 - **Every stage is logged** when `Pipeline.run(..., verbose=True)` (agent and adapter calls alike) with types and a truncated data preview, so a broken pipeline is diagnosable from log output alone.
 - **The core library has zero required dependencies.** Framework support lives in optional, lazily-imported bridge modules — installing `adaptron` alone never pulls in LangChain or CrewAI.
 
@@ -126,7 +148,7 @@ Adaptron is built milestone-by-milestone (see [PLAN.md §3](./PLAN.md) / [TASKS.
 | 6 | CrewAI bridge | Done |
 | 7 | Error handling audit | Done |
 | 8 | Example pipelines + README | Done (`0.1.0`; optional README GIF / git tag left to the releaser) |
-| 9 | Interactive playground | Stretch (optional) |
+| 9 | Interactive playground | Done (stretch — illustrative static replay only) |
 
 ## Documentation
 
@@ -137,6 +159,7 @@ Adaptron is built milestone-by-milestone (see [PLAN.md §3](./PLAN.md) / [TASKS.
 | [STRUCTURE.md](./STRUCTURE.md) | Repository layout and file-by-file rationale |
 | [TASKS.md](./TASKS.md) | Phase-based implementation roadmap |
 | [CHANGELOG.md](./CHANGELOG.md) | Released notes (`0.1.0`) and `[Unreleased]` |
+| [docs/playground/](./docs/playground/) | Illustrative (non-live) flagship pipeline replay |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Dev setup, CI expectations, actionable-error guidance |
 
 ## Contributing

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adaptron playground — illustrative simulation only</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="banner" role="status">
+      <strong>Illustrative simulation only.</strong>
+      This page replays a scripted walkthrough of the flagship pipeline. It does
+      <strong>not</strong> execute Adaptron, LangChain, CrewAI, or any LLM. For a
+      real run, see
+      <a href="../../examples/cross_framework_pipeline.py"
+        >examples/cross_framework_pipeline.py</a
+      >
+      (<code>--mock</code> needs no API keys; <code>--live</code> needs
+      <code>OPENAI_API_KEY</code>).
+    </div>
+
+    <div class="wrap">
+      <header>
+        <h1>Simulated flagship pipeline replay</h1>
+        <p class="sub">
+          Scripted stages from the Phase 8 cross-framework mock: LangChain →
+          auto-inserted <code>Message→str</code> adapter → CrewAI → plain
+          formatter. No network, no package imports from this page.
+        </p>
+      </header>
+
+      <p class="topic">Input topic: <code id="topic-value">…</code></p>
+
+      <div
+        id="diagram"
+        class="diagram"
+        aria-label="Linear pipeline stage diagram"
+      ></div>
+
+      <div class="controls">
+        <button type="button" class="primary" id="btn-play">Play replay</button>
+        <button type="button" id="btn-step">Step</button>
+        <button type="button" id="btn-reset" disabled>Reset</button>
+      </div>
+
+      <h2 class="panel-title">Verbose log (scripted)</h2>
+      <div id="log" class="log" aria-live="polite"></div>
+
+      <h2 class="panel-title">Final result (scripted)</h2>
+      <pre id="result" class="result">Replay finishes here — scripted result only.</pre>
+
+      <footer>
+        Data file:
+        <a href="replay-data.json"><code>replay-data.json</code></a>
+        · Format decision:
+        <a href="README.md"><code>README.md</code></a>
+      </footer>
+    </div>
+
+    <script src="replay.js" defer></script>
+  </body>
+</html>

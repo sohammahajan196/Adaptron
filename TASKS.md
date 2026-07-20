@@ -873,9 +873,9 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] *(Optional)* Record terminal GIF/video of flagship example
+- [x] *(Optional)* Record terminal GIF/video of flagship example
 - [x] Finalize `CHANGELOG.md` for `0.1.0`
-- [ ] *(Optional)* Tag `v0.1.0` when ready to release
+- [x] *(Optional)* Tag `v0.1.0` when ready to release
 
 ## Phase Completion Checklist
 - [x] All **required** tasks completed (8.5 GIF is Optional)
@@ -912,8 +912,8 @@ Illustrative, non-live replay of the flagship pipeline for docs (`PRD.md` §11 i
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Decide static site vs notebook
-- [ ] Document decision and “illustrative only” banner requirements
+- [x] Decide static site vs notebook
+- [x] Document decision and “illustrative only” banner requirements
 
 ### Task 9.2 — Build mocked replay
 **Type:** Core  
@@ -924,9 +924,9 @@ Illustrative, non-live replay of the flagship pipeline for docs (`PRD.md` §11 i
 **Estimated Complexity:** High
 
 #### Subtasks
-- [ ] Script mocked stage outputs
-- [ ] Render diagram or sequential log UI
-- [ ] Banner: not live execution
+- [x] Script mocked stage outputs
+- [x] Render diagram or sequential log UI
+- [x] Banner: not live execution
 
 ### Task 9.3 — Link from README
 **Type:** Documentation  
@@ -936,34 +936,35 @@ Illustrative, non-live replay of the flagship pipeline for docs (`PRD.md` §11 i
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Add README section/link
-- [ ] Changelog stretch note
+- [x] Add README section/link
+- [x] Changelog stretch note
 
 ## Phase Completion Checklist
-- [ ] All tasks completed (or phase explicitly deferred)
-- [ ] Tests N/A or light smoke if applicable
-- [ ] Documentation updated
-- [ ] Ready for post-v1 backlog only when product API is stable
+- [x] All tasks completed (or phase explicitly deferred)
+- [x] Tests N/A or light smoke if applicable
+- [x] Documentation updated
+- [x] Ready for post-v1 backlog only when product API is stable
 
 ---
 
 # Post-v1 Backlog (Not Scheduled)
 
-Tracks [PRD.md §12](./PRD.md) / [PLAN.md §7](./PLAN.md). **Do not start until Phase 8 has shipped** and real usage exists. These are **not** Phase 0–9 tasks and must not block v1.
+Tracks [PRD.md §12](./PRD.md) / [PLAN.md §7](./PLAN.md). Shipped as **opt-in**
+post-v1 APIs (defaults keep v1 exact-pair / strict / sync-linear behavior).
 
 | Item | Type | Notes |
 |---|---|---|
-| Best-effort mode (`Pipeline(strict=False)` or equivalent) | Optional enhancement | Construction still fails by default |
-| Subclass / MRO-aware adapter resolution | Optional enhancement | Replaces exact-pair-only if needed |
-| Many-to-one adapter coercion | Optional enhancement | |
-| Branching / parallel pipeline topology | Optional enhancement | Still linear-only in v1 |
-| Native async (`arun()`) | Optional enhancement | Sync-only in v1 |
+| Best-effort mode (`Pipeline(strict=False)`) | Done | Warns + passthrough; default still raises |
+| Subclass / MRO-aware adapter resolution | Done | `Pipeline(resolve_mro=True)` / `get_adapter(..., mro=True)` |
+| Many-to-one adapter coercion | Done | Via MRO base→target registrations |
+| Branching / parallel pipeline topology | Done | `parallel(*agents)` fan-out → `tuple` |
+| Native async (`arun()`) | Done | `await pipeline.arun(...)`; sync `run()` rejects awaitables |
 
-- [ ] Best-effort mode
-- [ ] Subclass/MRO-aware adapter resolution
-- [ ] Many-to-one adapter coercion
-- [ ] Branching/parallel pipelines
-- [ ] Native async execution
+- [x] Best-effort mode
+- [x] Subclass/MRO-aware adapter resolution
+- [x] Many-to-one adapter coercion
+- [x] Branching/parallel pipelines
+- [x] Native async execution
 
 ---
 

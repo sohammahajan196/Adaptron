@@ -1,11 +1,10 @@
 """Adaptron — interconnect agents across frameworks via typed adapters.
 
 Public API only (STRUCTURE.md): ``wrap``, ``register_adapter``, ``Pipeline``,
-``Agent``. ``wrap()`` probes bridges before the plain-Python catch-all, most
-specific first (PLAN.md §2.4): LangChain → CrewAI → plain-Python. A bridge
-is skipped entirely if its framework isn't installed, so core never
-hard-depends on it. Registered adapters are not yet consulted during
-``Pipeline`` construction — that wiring lands in Task 3.3.
+``Agent``, and post-v1 ``parallel``. ``wrap()`` probes bridges before the
+plain-Python catch-all, most specific first (PLAN.md §2.4): LangChain →
+CrewAI → plain-Python. A bridge is skipped entirely if its framework isn't
+installed, so core never hard-depends on it.
 """
 
 from __future__ import annotations
@@ -16,9 +15,9 @@ from typing import Any
 from adaptron.core.adapters import register_adapter
 from adaptron.core.agent import Agent
 from adaptron.core.errors import WrapError
-from adaptron.core.pipeline import Pipeline
+from adaptron.core.pipeline import Pipeline, parallel
 
-__all__ = ["Agent", "Pipeline", "register_adapter", "wrap"]
+__all__ = ["Agent", "Pipeline", "parallel", "register_adapter", "wrap"]
 
 
 def _bridge_kwargs(input_type: Any, output_type: Any, name: str) -> dict[str, Any]:

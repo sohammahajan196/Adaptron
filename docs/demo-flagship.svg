@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
+  <title id="title">Adaptron flagship pipeline (illustrative)</title>
+  <desc id="desc">Animated diagram of LangChain to adapter to CrewAI to formatter. Simulated demo  not a live run.</desc>
+  <defs>
+    <style>
+      .bg { fill: #0f1419; }
+      .banner { fill: #3a2218; }
+      .banner-text { fill: #f0c4a8; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; }
+      .node { fill: #1a222c; stroke: #2c3848; stroke-width: 1.5; }
+      .node-adapter { stroke: #e8b84a; }
+      .label { fill: #e8eef4; font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+      .meta { fill: #8b9aab; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 9px; }
+      .arrow { fill: none; stroke: #3dba9c; stroke-width: 2; stroke-linecap: round; }
+      .pulse { opacity: 0.15; }
+      .hl0 { animation: hl 6s ease-in-out infinite; animation-delay: 0s; }
+      .hl1 { animation: hl 6s ease-in-out infinite; animation-delay: 1.5s; }
+      .hl2 { animation: hl 6s ease-in-out infinite; animation-delay: 3s; }
+      .hl3 { animation: hl 6s ease-in-out infinite; animation-delay: 4.5s; }
+      @keyframes hl {
+        0%, 12% { opacity: 0.15; }
+        18%, 30% { opacity: 1; }
+        40%, 100% { opacity: 0.35; }
+      }
+    </style>
+  </defs>
+  <rect class="bg" width="720" height="220" rx="8"/>
+  <rect class="banner" x="0" y="0" width="720" height="28"/>
+  <text class="banner-text" x="16" y="18">Illustrative simulation  not a live Adaptron / LLM run</text>
+
+  <g class="hl0">
+    <rect class="node" x="24" y="70" width="140" height="56" rx="4"/>
+    <text class="label" x="36" y="94">langchain_researcher</text>
+    <text class="meta" x="36" y="112">str ’ Message</text>
+  </g>
+  <path class="arrow" d="M172 98 H204"/>
+
+  <g class="hl1">
+    <rect class="node node-adapter" x="212" y="70" width="150" height="56" rx="4"/>
+    <text class="label" x="224" y="94">adapter&lt;Message’str&gt;</text>
+    <text class="meta" x="224" y="112">auto-inserted</text>
+  </g>
+  <path class="arrow" d="M370 98 H402"/>
+
+  <g class="hl2">
+    <rect class="node" x="410" y="70" width="130" height="56" rx="4"/>
+    <text class="label" x="422" y="94">crewai_writer</text>
+    <text class="meta" x="422" y="112">str ’ str</text>
+  </g>
+  <path class="arrow" d="M548 98 H580"/>
+
+  <g class="hl3">
+    <rect class="node" x="588" y="70" width="108" height="56" rx="4"/>
+    <text class="label" x="600" y="94">format_result</text>
+    <text class="meta" x="600" y="112">str ’ dict</text>
+  </g>
+
+  <text class="meta" x="24" y="170">Flagship mock replay · see docs/playground/index.html for interactive version</text>
+  <text class="label" x="24" y="198">{'status': 'ok', &}</text>
+</svg>
