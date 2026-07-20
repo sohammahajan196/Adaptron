@@ -74,7 +74,13 @@ pipeline.run("hello adaptron", verbose=True)
 # stage='word_count' in=dict out=dict input={'text': 'HELLO ADAPTRON'} output={'words': 2}
 ```
 
-See [`examples/`](./examples) for a runnable version of this, plus the flagship `cross_framework_pipeline.py` example combining a real LangChain agent, a real CrewAI agent, and a plain Python function.
+See [`examples/plain_python_pipeline.py`](./examples/plain_python_pipeline.py)
+for a runnable version of this (bare `adaptron`, no framework extras). The
+flagship cross-framework demo is
+[`examples/cross_framework_pipeline.py`](./examples/cross_framework_pipeline.py)
+(LangChain → auto `Message→str` adapter → CrewAI → plain formatter; default
+`--mock` needs `adaptron[langchain,crewai]` but no API keys; `--live` needs
+`OPENAI_API_KEY`).
 
 ## How it works
 

@@ -821,9 +821,9 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 **Estimated Complexity:** Low
 
 #### Subtasks
-- [ ] Write script matching README quickstart spirit
-- [ ] *(Testing)* Manual run + optional thin test importing the pipeline logic
-- [ ] *(Documentation)* README points at this file
+- [x] Write script matching README quickstart spirit
+- [x] *(Testing)* Manual run + optional thin test importing the pipeline logic
+- [x] *(Documentation)* README points at this file
 
 ### Task 8.2 — Cross-framework example
 **Type:** Core  
@@ -834,10 +834,10 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 **Estimated Complexity:** High
 
 #### Subtasks
-- [ ] Implement real (or well-documented mockable) cross-framework pipeline
-- [ ] Show auto-adaptation in verbose logs
-- [ ] Document env vars / keys at top of file
-- [ ] Label clearly if any part is mocked for CI
+- [x] Implement real (or well-documented mockable) cross-framework pipeline
+- [x] Show auto-adaptation in verbose logs
+- [x] Document env vars / keys at top of file
+- [x] Label clearly if any part is mocked for CI
 
 ### Task 8.3 — Example / e2e tests
 **Type:** Testing  
@@ -847,9 +847,9 @@ Prove interoperability with runnable examples and finalize the human-facing READ
 **Estimated Complexity:** Medium
 
 #### Subtasks
-- [ ] Test plain example output
-- [ ] Gate or mock cross-framework so CI can pass without paid APIs where possible
-- [ ] Assert ≥1 adapter stage when testing adaptation claim
+- [x] Test plain example output
+- [x] Gate or mock cross-framework so CI can pass without paid APIs where possible
+- [x] Assert ≥1 adapter stage when testing adaptation claim
 
 ### Task 8.4 — README accuracy pass
 **Type:** Documentation  
